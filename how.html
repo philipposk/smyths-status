@@ -80,20 +80,13 @@
   </ul>
   <blockquote>Honest trade-off: Tor is slower per request than a direct connection, and the exit pool quality swings over the day — throughput oscillates (roughly 15–80 products/min) as good exits come and go. But it's <b>free and unlimited</b>. The genuinely fast, steady path is <b>paid residential proxies</b> (trusted home IPs) — hours instead of overnight, for a few dollars.</blockquote>
 
-  <h2>Timeline (this run)</h2>
-  <ul id="timeline" class="tl"><li class="mut">loading…</li></ul>
+  <h2>Timeline</h2>
+  <p>Every block, fix, and milestone of this run — with timestamps — lives on its own page: <a href="timeline.html">see the full timeline →</a></p>
+
+  <h2>A note on privacy</h2>
+  <p>This dashboard publishes <b>only progress numbers</b> — counts, rate, ETA, and the event timeline. The actual scraped product data (names, prices, descriptions) is <b>never</b> put on this site; it stays in a local file. What you see here is the run's metadata, not the catalogue itself.</p>
 
   <p class="mut" style="margin-top:30px"><a href="index.html">← back to live progress</a></p>
 </div>
-<script>
-const TZ='Europe/Copenhagen';
-const TC={block:'#f2746b',fix:'#4dd4ac',scale:'#3aa6ff',milestone:'#f2b441',note:'#8b97a8'};
-const fmt=(t)=>new Date(t).toLocaleString('en-GB',{timeZone:TZ,day:'2-digit',month:'short',hour:'2-digit',minute:'2-digit'});
-fetch('data/events.json?_='+Date.now()).then((r)=>r.json()).then((ev)=>{
-  document.getElementById('timeline').innerHTML = ev.slice().sort((a,b)=>a.t-b.t).map((e)=>
-    `<li><span style="display:inline-block;width:9px;height:9px;border-radius:50%;background:${TC[e.type]||'#8b97a8'};margin-right:8px"></span>`+
-    `<b>${fmt(e.t)}</b> — <b>${e.title}</b><br><span class="mut" style="margin-left:17px;display:inline-block">${e.detail||''}</span></li>`).join('');
-}).catch(()=>{ document.getElementById('timeline').innerHTML='<li class="mut">timeline unavailable</li>'; });
-</script>
 </body>
 </html>
