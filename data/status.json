@@ -1,53 +1,53 @@
 {
-  "updated": 1780660691954,
+  "updated": 1780660994907,
   "total": 58650,
-  "done": 28199,
-  "fails": 14903,
-  "pct": 48.08,
-  "ratePerMin": 67.02,
-  "etaMin": 454,
+  "done": 28523,
+  "fails": 14965,
+  "pct": 48.63,
+  "ratePerMin": 69.43,
+  "etaMin": 434,
   "countries": [
     {
       "cc": "uk",
-      "done": 3852,
+      "done": 3899,
       "total": 7671,
-      "pct": 50.2
+      "pct": 50.8
     },
     {
       "cc": "ie",
-      "done": 3618,
+      "done": 3657,
       "total": 7616,
-      "pct": 47.5
+      "pct": 48
     },
     {
       "cc": "de",
-      "done": 4273,
+      "done": 4324,
       "total": 9001,
-      "pct": 47.5
+      "pct": 48
     },
     {
       "cc": "at",
-      "done": 4287,
+      "done": 4341,
       "total": 8894,
-      "pct": 48.2
+      "pct": 48.8
     },
     {
       "cc": "ch",
-      "done": 4179,
+      "done": 4221,
       "total": 8815,
-      "pct": 47.4
+      "pct": 47.9
     },
     {
       "cc": "fr",
-      "done": 4319,
+      "done": 4370,
       "total": 9065,
-      "pct": 47.6
+      "pct": 48.2
     },
     {
       "cc": "nl",
-      "done": 3671,
+      "done": 3711,
       "total": 7588,
-      "pct": 48.4
+      "pct": 48.9
     }
   ]
 }
