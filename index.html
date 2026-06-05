@@ -75,7 +75,7 @@
 <script>
 const FLAG = { uk:'🇬🇧', ie:'🇮🇪', de:'🇩🇪', at:'🇦🇹', ch:'🇨🇭', fr:'🇫🇷', nl:'🇳🇱' };
 const TZ = 'Europe/Copenhagen';
-const TYPE_COLOR = { block:'#f2746b', fix:'#4dd4ac', scale:'#3aa6ff', milestone:'#f2b441', note:'#8b97a8' };
+const TYPE_COLOR = { block:'#f2746b', fix:'#4dd4ac', scale:'#3aa6ff', milestone:'#f2b441', heartbeat:'#3fb950', note:'#8b97a8' };
 const fmtEta = (m) => { if(m==null) return '—'; const d=Math.floor(m/1440), h=Math.floor((m%1440)/60), mm=m%60; return (d?d+'d ':'')+(h?h+'h ':'')+mm+'m'; };
 const fmtFull = (t) => new Date(t).toLocaleString('en-GB',{timeZone:TZ,day:'2-digit',month:'short',hour:'2-digit',minute:'2-digit'});
 const charts = {};
@@ -120,6 +120,7 @@ async function load(){
 
   const hist = await fetch('data/history.json?_='+Date.now()).then(r=>r.json()).catch(()=>[]);
   const events = await fetch('data/events.json?_='+Date.now()).then(r=>r.json()).catch(()=>[]);
+  const evMarks = events.filter(e=>e.type!=='heartbeat');
 
   if(!charts.prog){
     charts.prog = timeChart('cProg','done','#4dd4ac', true);
@@ -127,15 +128,15 @@ async function load(){
     charts.rate = timeChart('cRate','rate','#3aa6ff', true);
   }
   charts.prog.data.datasets[0].data = hist.map(e=>({x:e.t,y:e.done}));
-  charts.prog.data.datasets[1].data = events.map(e=>({ x:e.t, y:valueAt(hist,e.t,'done'), _ev:e, backgroundColor:TYPE_COLOR[e.type]||'#8b97a8' }));
+  charts.prog.data.datasets[1].data = evMarks.map(e=>({ x:e.t, y:valueAt(hist,e.t,'done'), _ev:e, backgroundColor:TYPE_COLOR[e.type]||'#8b97a8' }));
   charts.prog.update('none');
 
   charts.eta.data.datasets[0].data = hist.filter(e=>e.etaMin!=null).map(e=>({x:e.t,y:+(e.etaMin/60).toFixed(1)}));
-  charts.eta.data.datasets[1].data = events.map(e=>{ const v=valueAt(hist,e.t,'etaMin'); return { x:e.t, y:v==null?null:+(v/60).toFixed(1), _ev:e, backgroundColor:TYPE_COLOR[e.type]||'#8b97a8' }; });
+  charts.eta.data.datasets[1].data = evMarks.map(e=>{ const v=valueAt(hist,e.t,'etaMin'); return { x:e.t, y:v==null?null:+(v/60).toFixed(1), _ev:e, backgroundColor:TYPE_COLOR[e.type]||'#8b97a8' }; });
   charts.eta.update('none');
 
   charts.rate.data.datasets[0].data = hist.filter(e=>e.ratePerMin!=null).map(e=>({x:e.t,y:e.ratePerMin}));
-  charts.rate.data.datasets[1].data = events.map(e=>({ x:e.t, y:valueAt(hist,e.t,'ratePerMin'), _ev:e, backgroundColor:TYPE_COLOR[e.type]||'#8b97a8' }));
+  charts.rate.data.datasets[1].data = evMarks.map(e=>({ x:e.t, y:valueAt(hist,e.t,'ratePerMin'), _ev:e, backgroundColor:TYPE_COLOR[e.type]||'#8b97a8' }));
   charts.rate.update('none');
 
   if(!charts.cty){

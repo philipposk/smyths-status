@@ -64,5 +64,11 @@
     "type": "block",
     "title": "Lane churn",
     "detail": "0 relaunched, 4 paused (degraded datacenter exits cooling down)."
+  },
+  {
+    "t": 1780636110281,
+    "type": "heartbeat",
+    "title": "Live status",
+    "detail": "6,220 / 58,650 (10.61%) · 12.52/min · ETA 70h · 6869 fails"
   }
 ]
