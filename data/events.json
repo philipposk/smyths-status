@@ -102,12 +102,6 @@
     "detail": "0 relaunched, 3 paused (degraded datacenter exits cooling down)."
   },
   {
-    "t": 1780639441329,
-    "type": "tick",
-    "rate": 48.87,
-    "detail": "8,946/58,650 (15.25%) · 48.87/min · 8911 fails"
-  },
-  {
     "t": 1780639744442,
     "type": "tick",
     "rate": 41.46,
@@ -430,5 +424,11 @@
     "type": "tick",
     "rate": 71.58,
     "detail": "21,557/58,650 (36.76%) · 71.58/min · 12975 fails"
+  },
+  {
+    "t": 1780653713791,
+    "type": "tick",
+    "rate": 68.9,
+    "detail": "21,886/58,650 (37.32%) · 68.9/min · 13024 fails"
   }
 ]
