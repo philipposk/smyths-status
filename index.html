@@ -6,7 +6,6 @@
 <title>Smyths Scrape — Live Progress</title>
 <script src="https://cdn.jsdelivr.net/npm/chart.js@4.4.1/dist/chart.umd.min.js"></script>
 <script src="https://cdn.jsdelivr.net/npm/chartjs-adapter-date-fns@3.0.0/dist/chartjs-adapter-date-fns.bundle.min.js"></script>
-<script src="https://cdn.jsdelivr.net/npm/chartjs-plugin-annotation@3.0.1/dist/chartjs-plugin-annotation.min.js"></script>
 <style>
   :root { --bg:#0b0e14; --card:#141925; --line:#222a3a; --txt:#e6edf3; --mut:#8b97a8; --accent:#4dd4ac; }
   * { box-sizing:border-box; }
@@ -47,13 +46,13 @@
 <div class="wrap">
   <header>
     <h1>🛒 Smyths Toys — Live Scrape</h1>
-    <div class="mut">updated <span id="updated">—</span> · <a href="how.html">how this works →</a></div>
+    <div class="mut">updated <span id="updated">—</span> · <a href="how.html">how it works →</a> · <a href="samples.html">examples →</a></div>
   </header>
 
   <div class="hero">
     <div class="big"><span id="done">—</span><span class="total"> / <span id="total">—</span></span></div>
     <div class="bar"><div id="barfill"></div></div>
-    <div class="sub"><b id="pct">—</b>% done · ETA <b id="eta">—</b> · <span id="rate">—</span>/min · <span id="lanes" class="mut"></span> · <span id="fails" class="mut">0 fails</span></div>
+    <div class="sub"><b id="pct">—</b>% done · ETA <b id="eta">—</b> · <span id="rate">—</span>/min · <span id="fails" class="mut">0 fails</span></div>
   </div>
 
   <div class="grid" id="countries"></div>
@@ -70,7 +69,7 @@
     <ul id="timeline"></ul>
   </div>
 
-  <footer>auto-refreshes every 60s · data pushed every ~5 min · times in Copenhagen · <a href="how.html">read the full story →</a></footer>
+  <footer>auto-refreshes every 60s · data pushed every ~5 min · times in Copenhagen · <a href="how.html">the full story →</a></footer>
 </div>
 
 <script>
@@ -79,8 +78,6 @@ const TZ = 'Europe/Copenhagen';
 const TYPE_COLOR = { block:'#f2746b', fix:'#4dd4ac', scale:'#3aa6ff', milestone:'#f2b441', note:'#8b97a8' };
 const fmtEta = (m) => { if(m==null) return '—'; const d=Math.floor(m/1440), h=Math.floor((m%1440)/60), mm=m%60; return (d?d+'d ':'')+(h?h+'h ':'')+mm+'m'; };
 const fmtFull = (t) => new Date(t).toLocaleString('en-GB',{timeZone:TZ,day:'2-digit',month:'short',hour:'2-digit',minute:'2-digit'});
-const fmtClock = (t) => new Date(t).toLocaleString('en-GB',{timeZone:TZ,hour:'2-digit',minute:'2-digit'});
-if (window['chartjs-plugin-annotation']) { try { Chart.register(window['chartjs-plugin-annotation']); } catch(e){} }
 const charts = {};
 const xAxis = { type:'time', time:{ displayFormats:{ hour:'HH:mm', minute:'HH:mm' } }, ticks:{ color:'#8b97a8', maxTicksLimit:7 }, grid:{ color:'#1d2433' } };
 const yAxis = { ticks:{ color:'#8b97a8' }, grid:{ color:'#1d2433' }, beginAtZero:true };
@@ -91,24 +88,16 @@ function doneAt(hist, t) {
   for (const p of hist) { if (p.t >= t) { if (p.t === prev.t) return p.done; const r=(t-prev.t)/(p.t-prev.t); return Math.round(prev.done+r*(p.done-prev.done)); } prev = p; }
   return hist[hist.length-1].done;
 }
-function eventAnnotations(events) {
-  const ann = {};
-  events.forEach((e,i) => { ann['e'+i] = { type:'line', xMin:e.t, xMax:e.t, borderColor:TYPE_COLOR[e.type]||'#8b97a8', borderWidth:1.5, borderDash:[4,4],
-    label:{ display:true, content:(e.title.length>18?e.title.slice(0,17)+'…':e.title), position:'start', rotation:90, font:{size:9}, color:'#0b0e14', backgroundColor:(TYPE_COLOR[e.type]||'#8b97a8'), padding:3 } }; });
-  return ann;
-}
 function timeChart(id, label, color, withEvents) {
+  const datasets = [{ type:'line', label, data:[], borderColor:color, backgroundColor:color+'22', fill:true, tension:.25, pointRadius:0, borderWidth:2 }];
+  if (withEvents) datasets.push({ type:'scatter', label:'events', data:[], pointRadius:6, pointHoverRadius:9, pointStyle:'rectRot', borderColor:'#fff', borderWidth:1 });
   return new Chart(document.getElementById(id), {
-    data: { datasets: [
-      { type:'line', label, data:[], borderColor:color, backgroundColor:color+'22', fill:true, tension:.25, pointRadius:0, borderWidth:2 },
-      { type:'scatter', label:'events', data:[], pointRadius:6, pointHoverRadius:9, pointStyle:'rectRot', borderColor:'#fff', borderWidth:1 },
-    ]},
-    options: { maintainAspectRatio:true, parsing:true, scales:{ x:xAxis, y:yAxis },
+    data: { datasets },
+    options: { maintainAspectRatio:true, scales:{ x:xAxis, y:yAxis },
       plugins:{ legend:{display:false},
         tooltip:{ callbacks:{ title:(items)=>fmtFull(items[0].parsed.x),
           label:(ctx)=> ctx.raw && ctx.raw._ev ? '◆ '+ctx.raw._ev.title : (label+': '+ctx.parsed.y),
-          afterLabel:(ctx)=> ctx.raw && ctx.raw._ev ? ctx.raw._ev.detail : '' } },
-        annotation:{ annotations:{} } } }
+          afterLabel:(ctx)=> ctx.raw && ctx.raw._ev ? ctx.raw._ev.detail : '' } } } }
   });
 }
 
@@ -133,23 +122,17 @@ async function load(){
 
   if(!charts.prog){
     charts.prog = timeChart('cProg','done','#4dd4ac', true);
-    charts.eta  = timeChart('cEta','eta','#f2b441', true);
+    charts.eta  = timeChart('cEta','eta','#f2b441', false);
     charts.rate = timeChart('cRate','rate','#3aa6ff', false);
   }
-  const evPts = (yf) => events.map(e=>({ x:e.t, y:yf(e), _ev:e, backgroundColor:TYPE_COLOR[e.type]||'#8b97a8' }));
-
   charts.prog.data.datasets[0].data = hist.map(e=>({x:e.t,y:e.done}));
-  charts.prog.data.datasets[1].data = evPts(e=>doneAt(hist,e.t));
-  charts.prog.options.plugins.annotation.annotations = eventAnnotations(events);
+  charts.prog.data.datasets[1].data = events.map(e=>({ x:e.t, y:doneAt(hist,e.t), _ev:e, backgroundColor:TYPE_COLOR[e.type]||'#8b97a8' }));
   charts.prog.update('none');
 
   charts.eta.data.datasets[0].data = hist.filter(e=>e.etaMin!=null).map(e=>({x:e.t,y:+(e.etaMin/60).toFixed(1)}));
-  charts.eta.data.datasets[1].data = evPts(()=>null).map(p=>({...p,y:null}));
-  charts.eta.options.plugins.annotation.annotations = eventAnnotations(events);
   charts.eta.update('none');
 
   charts.rate.data.datasets[0].data = hist.filter(e=>e.ratePerMin!=null).map(e=>({x:e.t,y:e.ratePerMin}));
-  charts.rate.data.datasets[1].data = [];
   charts.rate.update('none');
 
   if(!charts.cty){

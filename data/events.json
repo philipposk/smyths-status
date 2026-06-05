@@ -6,16 +6,16 @@
     "detail": "Single lane (UK). patchright punches through Imperva where curl, Firecrawl and plain Playwright all failed."
   },
   {
-    "t": 1780623081000,
+    "t": 1780624200000,
     "type": "block",
     "title": "Rate-block hit (~497)",
-    "detail": "Home IP tripped Imperva’s per-IP limit (~450 requests in ~25 min). Got challenges instead of pages — paused to cool down."
+    "detail": "Home IP tripped Imperva’s per-IP limit. Challenges instead of pages — paused to cool down. ETA spikes here."
   },
   {
-    "t": 1780623600000,
+    "t": 1780624600000,
     "type": "fix",
     "title": "CAPTCHA solved → resumed",
-    "detail": "NordVPN datacenter IP fails automated, but a human-solved CAPTCHA clears it. Resumed scraping on the VPN IP. (~approx)"
+    "detail": "A human-solved CAPTCHA clears the session (works even on a NordVPN datacenter IP). Scraping resumes."
   },
   {
     "t": 1780625792000,
@@ -27,13 +27,13 @@
     "t": 1780627489000,
     "type": "scale",
     "title": "Scaled to 6 lanes",
-    "detail": "6 parallel browsers, each on a different Nord SOCKS5 exit IP. Solved 6 CAPTCHAs. ~6× throughput."
+    "detail": "6 parallel browsers, each on a different Nord SOCKS5 exit IP."
   },
   {
     "t": 1780628070000,
     "type": "scale",
     "title": "Scaled to 9 lanes",
-    "detail": "Nord’s max distinct exits (9). ~9× throughput, full run projected ~6h."
+    "detail": "Nord’s max distinct exits (9). Throughput jumps — watch the slope steepen."
   },
   {
     "t": 1780628686770,

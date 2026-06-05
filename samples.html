@@ -1,0 +1,65 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Smyths Scrape — Real Examples</title>
+<style>
+  :root { --bg:#0b0e14; --card:#141925; --line:#222a3a; --txt:#e6edf3; --mut:#8b97a8; --accent:#4dd4ac; }
+  * { box-sizing:border-box; }
+  body { margin:0; background:var(--bg); color:var(--txt); font:15px/1.6 -apple-system,BlinkMacSystemFont,"Segoe UI",Roboto,sans-serif; }
+  .wrap { max-width:900px; margin:0 auto; padding:28px 20px 70px; }
+  a { color:var(--accent); text-decoration:none; }
+  .mut { color:var(--mut); }
+  h1 { font-size:24px; margin:8px 0 4px; }
+  .cards { display:grid; grid-template-columns:1fr 1fr; gap:18px; margin-top:22px; }
+  @media(max-width:680px){ .cards{ grid-template-columns:1fr; } }
+  .card { background:var(--card); border:1px solid var(--line); border-radius:14px; overflow:hidden; }
+  .card .imgwrap { background:#fff; text-align:center; padding:16px; }
+  .card img { max-width:100%; max-height:230px; object-fit:contain; }
+  .card .body { padding:16px; }
+  .flag { font-size:13px; color:var(--mut); }
+  .nm { font-size:17px; font-weight:700; margin:4px 0 8px; }
+  .price { font-size:22px; font-weight:800; color:var(--accent); }
+  .meta { font-size:13px; color:var(--mut); margin:8px 0; }
+  .badge { display:inline-block; font-size:12px; padding:1px 8px; border-radius:20px; background:#16332a; color:var(--accent); }
+  .desc { font-size:13.5px; color:#cdd6e0; margin-top:12px; max-height:190px; overflow:auto; border-top:1px solid var(--line); padding-top:10px; }
+  .desc p { margin:0 0 8px; }
+  .btn { display:inline-block; margin-top:14px; background:var(--accent); color:#06281f; font-weight:700; padding:9px 14px; border-radius:9px; }
+  details { margin-top:12px; } summary { cursor:pointer; color:var(--mut); font-size:13px; }
+  pre { background:#0b0e14; border:1px solid var(--line); border-radius:8px; padding:10px; overflow:auto; font-size:11.5px; color:#9fb2c8; }
+</style>
+</head>
+<body>
+<div class="wrap">
+  <p class="mut"><a href="index.html">← live progress</a> · <a href="how.html">how it works →</a></p>
+  <h1>Proof it's real — two live examples</h1>
+  <p class="mut">These two products were pulled by the scraper from the actual Smyths sites (different countries). Every field below — name, price, stock, image, description — came straight out of the page. <b>Click "View original" to verify against the live site.</b></p>
+  <div class="cards" id="cards"><p class="mut">loading…</p></div>
+</div>
+<script>
+const SYM = { GBP:'£', EUR:'€', USD:'$' };
+const ccFromUrl = (u)=>{ const m=u.match(/smythstoys\.com\/([a-z]{2})\//); return m?m[1].toUpperCase():''; };
+const FLAG = { UK:'🇬🇧', IE:'🇮🇪', DE:'🇩🇪', AT:'🇦🇹', CH:'🇨🇭', FR:'🇫🇷', NL:'🇳🇱' };
+const esc = (s)=> (s||'').replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;');
+fetch('data/samples.json?_='+Date.now()).then(r=>r.json()).then(items=>{
+  document.getElementById('cards').innerHTML = items.map(p=>{
+    const cc = ccFromUrl(p.url);
+    const avail = (p.availability||'').replace(/([a-z])([A-Z])/g,'$1 $2');
+    return `<div class="card">
+      <div class="imgwrap"><img src="${p.image}" alt="${esc(p.name)}" loading="lazy"></div>
+      <div class="body">
+        <div class="flag">${FLAG[cc]||''} ${cc} · SKU ${esc(p.sku)}</div>
+        <div class="nm">${esc(p.name)}</div>
+        <div class="price">${SYM[p.currency]||''}${esc(p.price)} <span class="mut" style="font-size:12px">${esc(p.currency)}</span></div>
+        <div><span class="badge">${esc(avail)||'—'}</span></div>
+        <div class="meta">${esc(p.category)}</div>
+        <div class="desc">${p.description||'<span class="mut">no description</span>'}</div>
+        <a class="btn" href="${p.url}" target="_blank" rel="noopener">View original on smythstoys.com →</a>
+        <details><summary>raw scraped JSON</summary><pre>${esc(JSON.stringify(p,null,2))}</pre></details>
+      </div></div>`;
+  }).join('');
+}).catch(()=>{ document.getElementById('cards').innerHTML='<p class="mut">examples unavailable</p>'; });
+</script>
+</body>
+</html>
