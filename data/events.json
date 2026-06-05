@@ -238,5 +238,17 @@
     "type": "tick",
     "rate": 81.25,
     "detail": "11,412/58,650 (19.46%) · 81.25/min · 9919 fails"
+  },
+  {
+    "t": 1780642775417,
+    "type": "milestone",
+    "title": "Reached 20%",
+    "detail": "11,800 of 58,650 products."
+  },
+  {
+    "t": 1780642775417,
+    "type": "tick",
+    "rate": 81.62,
+    "detail": "11,800/58,650 (20.12%) · 81.62/min · 9926 fails"
   }
 ]
