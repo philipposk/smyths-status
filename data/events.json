@@ -40,5 +40,17 @@
     "type": "block",
     "title": "Slowdown / possible block",
     "detail": "Smyths: failures rising fast — now 1872 (was 124), 1541/58650 done. Possible block."
+  },
+  {
+    "t": 1780631357478,
+    "type": "block",
+    "title": "Lane(s) re-opened",
+    "detail": "1 lane(s) relaunched for a re-solve."
+  },
+  {
+    "t": 1780631357562,
+    "type": "milestone",
+    "title": "Watchdog resumed",
+    "detail": "Self-healing loop re-armed after a pause; iMessage alerts turned off (dashboard + chat only). Stuck lane revived."
   }
 ]
