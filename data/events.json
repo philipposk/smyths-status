@@ -210,12 +210,6 @@
     "detail": "41,279 of 58,650 products."
   },
   {
-    "t": 1780681182735,
-    "type": "tick",
-    "rate": 91.47,
-    "detail": "41,802/58,650 (71.27%) · 91.47/min · 18859 fails"
-  },
-  {
     "t": 1780681484591,
     "type": "tick",
     "rate": 100.85,
@@ -532,5 +526,17 @@
     "type": "tick",
     "rate": 29.22,
     "detail": "52,841/58,650 (90.1%) · 29.22/min · 21676 fails"
+  },
+  {
+    "t": 1780695489709,
+    "type": "block",
+    "title": "Slowdown / possible block",
+    "detail": "Smyths: progress STALLED at 52841/58650 (no new since last check). Likely blocked/re-warming."
+  },
+  {
+    "t": 1780695781916,
+    "type": "tick",
+    "rate": 17.09,
+    "detail": "52,841/58,650 (90.1%) · 17.09/min · 21676 fails"
   }
 ]
