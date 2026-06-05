@@ -82,11 +82,12 @@ const charts = {};
 const xAxis = { type:'time', time:{ displayFormats:{ hour:'HH:mm', minute:'HH:mm' } }, ticks:{ color:'#8b97a8', maxTicksLimit:7 }, grid:{ color:'#1d2433' } };
 const yAxis = { ticks:{ color:'#8b97a8' }, grid:{ color:'#1d2433' }, beginAtZero:true };
 
-function doneAt(hist, t) {
-  if (!hist.length) return 0;
-  let prev = hist[0];
-  for (const p of hist) { if (p.t >= t) { if (p.t === prev.t) return p.done; const r=(t-prev.t)/(p.t-prev.t); return Math.round(prev.done+r*(p.done-prev.done)); } prev = p; }
-  return hist[hist.length-1].done;
+function valueAt(hist, t, field) {
+  const pts = hist.filter((p) => p[field] != null);
+  if (!pts.length) return null;
+  let prev = pts[0];
+  for (const p of pts) { if (p.t >= t) { if (p.t === prev.t) return p[field]; const r=(t-prev.t)/(p.t-prev.t); return prev[field]+r*(p[field]-prev[field]); } prev = p; }
+  return pts[pts.length-1][field];
 }
 function timeChart(id, label, color, withEvents) {
   const datasets = [{ type:'line', label, data:[], borderColor:color, backgroundColor:color+'22', fill:true, tension:.25, pointRadius:0, borderWidth:2 }];
@@ -122,17 +123,19 @@ async function load(){
 
   if(!charts.prog){
     charts.prog = timeChart('cProg','done','#4dd4ac', true);
-    charts.eta  = timeChart('cEta','eta','#f2b441', false);
-    charts.rate = timeChart('cRate','rate','#3aa6ff', false);
+    charts.eta  = timeChart('cEta','eta','#f2b441', true);
+    charts.rate = timeChart('cRate','rate','#3aa6ff', true);
   }
   charts.prog.data.datasets[0].data = hist.map(e=>({x:e.t,y:e.done}));
-  charts.prog.data.datasets[1].data = events.map(e=>({ x:e.t, y:doneAt(hist,e.t), _ev:e, backgroundColor:TYPE_COLOR[e.type]||'#8b97a8' }));
+  charts.prog.data.datasets[1].data = events.map(e=>({ x:e.t, y:valueAt(hist,e.t,'done'), _ev:e, backgroundColor:TYPE_COLOR[e.type]||'#8b97a8' }));
   charts.prog.update('none');
 
   charts.eta.data.datasets[0].data = hist.filter(e=>e.etaMin!=null).map(e=>({x:e.t,y:+(e.etaMin/60).toFixed(1)}));
+  charts.eta.data.datasets[1].data = events.map(e=>{ const v=valueAt(hist,e.t,'etaMin'); return { x:e.t, y:v==null?null:+(v/60).toFixed(1), _ev:e, backgroundColor:TYPE_COLOR[e.type]||'#8b97a8' }; });
   charts.eta.update('none');
 
   charts.rate.data.datasets[0].data = hist.filter(e=>e.ratePerMin!=null).map(e=>({x:e.t,y:e.ratePerMin}));
+  charts.rate.data.datasets[1].data = events.map(e=>({ x:e.t, y:valueAt(hist,e.t,'ratePerMin'), _ev:e, backgroundColor:TYPE_COLOR[e.type]||'#8b97a8' }));
   charts.rate.update('none');
 
   if(!charts.cty){
