@@ -210,12 +210,6 @@
     "detail": "41,279 of 58,650 products."
   },
   {
-    "t": 1780681786990,
-    "type": "tick",
-    "rate": 98.77,
-    "detail": "42,712/58,650 (72.83%) · 98.77/min · 18960 fails"
-  },
-  {
     "t": 1780681903352,
     "type": "scale",
     "title": "Tor fleet rotation",
@@ -538,5 +532,11 @@
     "type": "tick",
     "rate": 6.92,
     "detail": "52,841/58,650 (90.1%) · 6.92/min · 21676 fails"
+  },
+  {
+    "t": 1780696391482,
+    "type": "tick",
+    "rate": 5.84,
+    "detail": "52,841/58,650 (90.1%) · 5.84/min · 21676 fails"
   }
 ]
