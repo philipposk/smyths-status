@@ -27,7 +27,7 @@
 <div class="wrap">
   <p class="mut"><a href="index.html">← back to live progress</a> · <a href="samples.html">see real examples →</a></p>
   <h1>How this scrape works</h1>
-  <p class="mut">Pulling every product (name, price, stock, description, image, category) from all 7 country sites of Smyths Toys — <b>58,650 products</b> across UK, IE, DE, AT, CH, FR, NL — for free, from one laptop.</p>
+  <p class="mut">Pulling every product (name, price, stock, description, image, category) from all 7 country sites of Smyths Toys — <b>58,650 products</b> across UK, IE, DE, AT, CH, FR, NL — for free, from one laptop running a small fleet of browser lanes.</p>
 
   <h2>The obstacle</h2>
   <p>Smyths sits behind <b>Imperva / Distil Advanced Bot Protection</b> — a "bouncer" that makes every visitor's browser solve a hidden JavaScript puzzle before it serves any page. Ordinary scraping tools have no JavaScript engine, so they get a <i>"Request unsuccessful"</i> wall instead of data. Even the sitemap (the list of products) is behind it.</p>
@@ -52,7 +52,7 @@
   </ol>
 
   <h2>Staying under the radar</h2>
-  <p>Everything leaves from one home IP, and Imperva counts requests per IP. So the scraper deliberately goes slow and human-like:</p>
+  <p>Imperva counts requests <b>per IP</b>, so every lane (see the fleet, below) deliberately goes slow and human-like:</p>
   <ul>
     <li>Random <b>0.8–7s gaps</b> between requests (not a robotic fixed interval).</li>
     <li>Occasional long "reading" pauses.</li>
@@ -65,11 +65,20 @@
     <tr><td>Tripped a per-IP rate limit (~450 requests in 25 min) → got challenged</td><td>Stop, cool down, resume at a gentler pace.</td></tr>
     <tr><td>Tried <b>NordVPN</b> to spread load</td><td><b>Automated</b> access on the VPN IP is blocked (datacenter IPs are pre-flagged) — <span class="good">but once a human solves one CAPTCHA on it, that VPN session scrapes fine.</span> The current run is on a NordVPN IP.</td></tr>
     <tr><td>A CAPTCHA appeared</td><td>A human solves it once in the live window; the scraper detects the clearance and auto-resumes through that same session.</td></tr>
+    <tr><td>Single lane too slow (~days)</td><td>Scaled to a <b>parallel fleet</b> — up to 9 browsers, each on a different NordVPN exit IP (see below).</td></tr>
+    <tr><td>Datacenter IPs degrade</td><td>Each Nord exit works in bursts (~100 products) then re-challenges; one exit (San Francisco) went fully dead. A <b>self-healing watchdog</b> relaunches dead lanes, the dead exit was retired, and its share of products was handed to the surviving lanes.</td></tr>
   </table>
-  <blockquote>Key lesson: the bottleneck isn't speed or proxies — it's that only a <b>human-solved challenge</b> truly opens the door. So the winning recipe is patience on a trusted IP, with a person tapping the occasional CAPTCHA.</blockquote>
+  <blockquote>Key lesson: the real bottleneck is the <b>human-solved challenge</b> — every IP, even a proxy, needs one to open its session. Speed then comes from running several solved sessions <b>in parallel</b> (next section), with a person tapping the occasional CAPTCHA.</blockquote>
 
-  <h2>Why not just go parallel / use proxies?</h2>
-  <p>Running many IPs at once would only multiply the CAPTCHAs — each new IP (VPN or not) needs its own human solve to clear Imperva's first challenge. The only clean "fast" path is paid <b>residential proxies</b> — trusted IP pools that avoid challenges — which costs money. For a free run, one careful lane wins.</p>
+  <h2>Going parallel: the browser fleet</h2>
+  <p>One lane would take days, so we run several browsers at once — each routed through a <b>different NordVPN SOCKS5 exit</b> (a different IP). Because Imperva's rate limit is per-IP, each lane gets its own budget, multiplying throughput.</p>
+  <ul>
+    <li><b>Different IP per browser.</b> Each lane uses a separate Nord exit (Amsterdam, Atlanta, Dallas, New York, …) — up to 9, now 8 after one died.</li>
+    <li><b>A tiny local relay (gost).</b> Chrome can't log in to a SOCKS proxy by itself, so a small local relay handles the Nord login and hands each browser a clean local port.</li>
+    <li><b>One human CAPTCHA per lane.</b> Each lane's session is opened by a single hand-solved challenge, then it scrapes its own shard of the catalogue.</li>
+    <li><b>Self-healing + resumable.</b> A watchdog checks every 5 min, relaunches any lane that dies, and the work is sharded so nothing is lost or scraped twice.</li>
+  </ul>
+  <blockquote>Honest trade-off: these are <b>datacenter</b> IPs, so they degrade — lanes re-challenge after a burst and need the odd re-solve, and an exit can die outright. The genuinely fast, near-zero-CAPTCHA path is <b>paid residential proxies</b> (trusted home IPs). The free fleet trades a little babysitting for $0.</blockquote>
 
   <h2>Timeline (this run)</h2>
   <ul id="timeline" class="tl"><li class="mut">loading…</li></ul>
