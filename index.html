@@ -50,7 +50,7 @@
 <div class="wrap">
   <header>
     <h1>🛒 Smyths Toys — Live Scrape</h1>
-    <div class="mut">updated <span id="updated">—</span> · <a href="how.html">how it works →</a> · <a href="timeline.html">timeline →</a> · <a href="samples.html">examples →</a></div>
+    <div class="mut">updated <span id="updated">—</span> · <a href="how.html">how it works →</a> · <a href="timeline.html">timeline →</a> · <a href="samples.html">examples →</a> · <a href="https://hydrascrape.6x7.gr" target="_blank" rel="noopener">order your own →</a> · <a id="dl" href="data/products.csv" download style="display:none;color:#f2b441;font-weight:700">⬇ download data →</a></div>
   </header>
 
   <div class="hero">
@@ -118,6 +118,7 @@ async function load(){
   document.getElementById('failsDelta').textContent = (s.failsDelta>0) ? '+'+s.failsDelta : '';
   document.getElementById('updated').textContent = fmtFull(s.updated);
   document.getElementById('barfill').style.width = s.pct+'%';
+  const dl=document.getElementById('dl'); if(dl && s.total>0 && s.done>=s.total) dl.style.display='inline';   // reveal download when the scrape finishes
 
   document.getElementById('countries').innerHTML = s.countries.map(c=>`
     <div class="cc"><div class="flag">${FLAG[c.cc]||''} <span class="mut">${c.cc.toUpperCase()}</span></div>
