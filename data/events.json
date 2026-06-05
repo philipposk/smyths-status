@@ -216,12 +216,6 @@
     "detail": "0 lanes relaunched, 3 exits rotated (free Tor circuits, all pass Imperva)."
   },
   {
-    "t": 1780682089278,
-    "type": "tick",
-    "rate": 91.89,
-    "detail": "43,033/58,650 (73.37%) · 91.89/min · 19057 fails"
-  },
-  {
     "t": 1780682392375,
     "type": "tick",
     "rate": 80.06,
@@ -538,5 +532,23 @@
     "type": "tick",
     "rate": 5.84,
     "detail": "52,841/58,650 (90.1%) · 5.84/min · 21676 fails"
+  },
+  {
+    "t": 1780696500905,
+    "type": "block",
+    "title": "Throughput dip (captcha-solver R&D)",
+    "detail": "Progress dipped to ~0 (and low before) while building + live-testing the free captcha solver: repeated lane restarts + rate-limited vision API calls stalled the fleet. Solver now PAUSED; pure-Tor scraping resumed at full 8 lanes. Solver re-enabled once it reliably clears a puzzle."
+  },
+  {
+    "t": 1780696595108,
+    "type": "scale",
+    "title": "Tor fleet rotation",
+    "detail": "0 lanes relaunched, 7 exits rotated (free Tor circuits, all pass Imperva)."
+  },
+  {
+    "t": 1780696693568,
+    "type": "tick",
+    "rate": 3.8,
+    "detail": "52,870/58,650 (90.14%) · 3.8/min · 21677 fails"
   }
 ]
