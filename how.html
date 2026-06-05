@@ -20,6 +20,7 @@
   .pill { display:inline-block; font-size:12px; padding:1px 8px; border-radius:20px; }
   .pill.f { background:#3a1f1d; color:var(--bad); } .pill.w { background:#16332a; color:var(--good); }
   blockquote { margin:16px 0; padding:10px 16px; border-left:3px solid var(--accent); background:var(--card); border-radius:0 8px 8px 0; color:var(--mut); }
+  ul.tl { list-style:none; padding:0; } ul.tl li { padding:9px 0; border-bottom:1px solid var(--line); }
 </style>
 </head>
 <body>
@@ -70,7 +71,20 @@
   <h2>Why not just go parallel / use proxies?</h2>
   <p>Running many IPs at once would only multiply the CAPTCHAs — each new IP (VPN or not) needs its own human solve to clear Imperva's first challenge. The only clean "fast" path is paid <b>residential proxies</b> — trusted IP pools that avoid challenges — which costs money. For a free run, one careful lane wins.</p>
 
+  <h2>Timeline (this run)</h2>
+  <ul id="timeline" class="tl"><li class="mut">loading…</li></ul>
+
   <p class="mut" style="margin-top:30px"><a href="index.html">← back to live progress</a></p>
 </div>
+<script>
+const TZ='Europe/Copenhagen';
+const TC={block:'#f2746b',fix:'#4dd4ac',scale:'#3aa6ff',milestone:'#f2b441',note:'#8b97a8'};
+const fmt=(t)=>new Date(t).toLocaleString('en-GB',{timeZone:TZ,day:'2-digit',month:'short',hour:'2-digit',minute:'2-digit'});
+fetch('data/events.json?_='+Date.now()).then((r)=>r.json()).then((ev)=>{
+  document.getElementById('timeline').innerHTML = ev.slice().sort((a,b)=>a.t-b.t).map((e)=>
+    `<li><span style="display:inline-block;width:9px;height:9px;border-radius:50%;background:${TC[e.type]||'#8b97a8'};margin-right:8px"></span>`+
+    `<b>${fmt(e.t)}</b> — <b>${e.title}</b><br><span class="mut" style="margin-left:17px;display:inline-block">${e.detail||''}</span></li>`).join('');
+}).catch(()=>{ document.getElementById('timeline').innerHTML='<li class="mut">timeline unavailable</li>'; });
+</script>
 </body>
 </html>
