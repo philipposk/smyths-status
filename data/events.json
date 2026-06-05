@@ -102,12 +102,6 @@
     "detail": "0 relaunched, 3 paused (degraded datacenter exits cooling down)."
   },
   {
-    "t": 1780638532278,
-    "type": "tick",
-    "rate": 58.79,
-    "detail": "8,381/58,650 (14.29%) · 58.79/min · 8073 fails"
-  },
-  {
     "t": 1780638835095,
     "type": "tick",
     "rate": 58.47,
@@ -424,5 +418,17 @@
     "type": "tick",
     "rate": 67.17,
     "detail": "20,621/58,650 (35.16%) · 67.17/min · 12943 fails"
+  },
+  {
+    "t": 1780652600043,
+    "type": "scale",
+    "title": "Tor fleet rotation",
+    "detail": "0 lanes relaunched, 2 exits rotated (free Tor circuits, all pass Imperva)."
+  },
+  {
+    "t": 1780652804921,
+    "type": "tick",
+    "rate": 69,
+    "detail": "20,864/58,650 (35.57%) · 69/min · 12951 fails"
   }
 ]
