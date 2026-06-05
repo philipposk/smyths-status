@@ -1,11 +1,11 @@
 {
-  "updated": 1780636110281,
+  "updated": 1780636121902,
   "total": 58650,
-  "done": 6220,
-  "fails": 6869,
+  "done": 6223,
+  "fails": 6871,
   "pct": 10.61,
-  "ratePerMin": 12.52,
-  "etaMin": 4187,
+  "ratePerMin": 10.03,
+  "etaMin": 5225,
   "countries": [
     {
       "cc": "uk",
@@ -15,7 +15,7 @@
     },
     {
       "cc": "ie",
-      "done": 749,
+      "done": 750,
       "total": 7616,
       "pct": 9.8
     },
@@ -27,7 +27,7 @@
     },
     {
       "cc": "at",
-      "done": 940,
+      "done": 942,
       "total": 8894,
       "pct": 10.6
     },
