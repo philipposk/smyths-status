@@ -186,12 +186,6 @@
     "detail": "35,279 of 58,650 products."
   },
   {
-    "t": 1780670439430,
-    "type": "tick",
-    "rate": 51.52,
-    "detail": "36,185/58,650 (61.7%) · 51.52/min · 17503 fails"
-  },
-  {
     "t": 1780670744745,
     "type": "tick",
     "rate": 45.07,
@@ -502,5 +496,17 @@
     "type": "tick",
     "rate": 60.11,
     "detail": "45,366/58,650 (77.35%) · 60.11/min · 20251 fails"
+  },
+  {
+    "t": 1780685505294,
+    "type": "scale",
+    "title": "Tor fleet rotation",
+    "detail": "0 lanes relaunched, 2 exits rotated (free Tor circuits, all pass Imperva)."
+  },
+  {
+    "t": 1780685726115,
+    "type": "tick",
+    "rate": 68.93,
+    "detail": "45,763/58,650 (78.03%) · 68.93/min · 20329 fails"
   }
 ]
