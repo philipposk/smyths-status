@@ -58,5 +58,11 @@
     "type": "block",
     "title": "Lanes restarted",
     "detail": "0 dead + 6 stuck lane(s) relaunched (datacenter exit degradation)."
+  },
+  {
+    "t": 1780632590847,
+    "type": "block",
+    "title": "Lane churn",
+    "detail": "0 relaunched, 4 paused (degraded datacenter exits cooling down)."
   }
 ]
