@@ -66,9 +66,9 @@
     "detail": "0 relaunched, 4 paused (degraded datacenter exits cooling down)."
   },
   {
-    "t": 1780636121902,
+    "t": 1780636413304,
     "type": "heartbeat",
     "title": "Live status",
-    "detail": "6,223 / 58,650 (10.61%) · 10.03/min · ETA 87h · 6871 fails"
+    "detail": "6,365 / 58,650 (10.85%) · 11.06/min · ETA 79h · 7937 fails"
   }
 ]
