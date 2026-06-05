@@ -1,0 +1,76 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>How the Smyths scrape works</title>
+<style>
+  :root { --bg:#0b0e14; --card:#141925; --line:#222a3a; --txt:#e6edf3; --mut:#8b97a8; --accent:#4dd4ac; --bad:#f2746b; --good:#4dd4ac; }
+  body { margin:0; background:var(--bg); color:var(--txt); font:16px/1.65 -apple-system,BlinkMacSystemFont,"Segoe UI",Roboto,sans-serif; }
+  .wrap { max-width:780px; margin:0 auto; padding:30px 22px 80px; }
+  a { color:var(--accent); text-decoration:none; }
+  h1 { font-size:26px; margin:6px 0 4px; }
+  h2 { font-size:19px; margin:34px 0 8px; padding-top:14px; border-top:1px solid var(--line); }
+  .mut { color:var(--mut); }
+  code { background:#1d2433; padding:2px 6px; border-radius:5px; font-size:13px; }
+  table { width:100%; border-collapse:collapse; margin:14px 0; font-size:14px; }
+  th,td { text-align:left; padding:8px 10px; border-bottom:1px solid var(--line); vertical-align:top; }
+  th { color:var(--mut); font-weight:600; }
+  .bad { color:var(--bad); } .good { color:var(--good); }
+  .pill { display:inline-block; font-size:12px; padding:1px 8px; border-radius:20px; }
+  .pill.f { background:#3a1f1d; color:var(--bad); } .pill.w { background:#16332a; color:var(--good); }
+  blockquote { margin:16px 0; padding:10px 16px; border-left:3px solid var(--accent); background:var(--card); border-radius:0 8px 8px 0; color:var(--mut); }
+</style>
+</head>
+<body>
+<div class="wrap">
+  <p class="mut"><a href="index.html">← back to live progress</a></p>
+  <h1>How this scrape works</h1>
+  <p class="mut">Pulling every product (name, price, stock, description, image, category) from all 7 country sites of Smyths Toys — <b>58,650 products</b> across UK, IE, DE, AT, CH, FR, NL — for free, from one laptop.</p>
+
+  <h2>The obstacle</h2>
+  <p>Smyths sits behind <b>Imperva / Distil Advanced Bot Protection</b> — a "bouncer" that makes every visitor's browser solve a hidden JavaScript puzzle before it serves any page. Ordinary scraping tools have no JavaScript engine, so they get a <i>"Request unsuccessful"</i> wall instead of data. Even the sitemap (the list of products) is behind it.</p>
+
+  <h2>What we tried — and what happened</h2>
+  <table>
+    <tr><th>Approach</th><th>Result</th><th>Why</th></tr>
+    <tr><td>plain <code>curl</code> / Python requests</td><td><span class="pill f">blocked</span></td><td>No JS engine — can't solve the challenge.</td></tr>
+    <tr><td>Firecrawl (cloud, stealth mode)</td><td><span class="pill f">challenged</span></td><td>Managed scraper still flagged by Imperva.</td></tr>
+    <tr><td>Playwright — headless Chrome</td><td><span class="pill f">blocked</span></td><td>Distil specifically detects headless browsers.</td></tr>
+    <tr><td>Playwright — headed real Chrome</td><td><span class="pill f">blocked</span></td><td>Imperva fingerprints the automation control layer itself.</td></tr>
+    <tr><td>Playwright + stealth plugin</td><td><span class="pill f">blocked</span></td><td>Stealth hides some tells, not the core CDP leak.</td></tr>
+    <tr><td><b>patchright</b> (patched Chrome driver) + real Chrome</td><td><span class="pill w">works ✓</span></td><td>Removes the exact automation signal Distil hunts for.</td></tr>
+  </table>
+  <blockquote>The breakthrough: <b>patchright</b> — a patched browser driver that strips the leftover "I'm a robot" signals from Chrome. It's the only free thing that walks through Imperva's front door.</blockquote>
+
+  <h2>How it actually pulls the data</h2>
+  <ol>
+    <li><b>Discovery.</b> A real browser opens each country's sitemap (solving the challenge automatically) and collects every product URL — the pattern is <code>/p/&lt;id&gt;</code>. That's how we know there are 58,650.</li>
+    <li><b>Extraction.</b> Each product page already contains a clean <code>JSON-LD</code> block (structured data search engines read) with name, price, availability, brand, image, description. We fetch it inside the warmed browser session and parse it — no need to render the whole page.</li>
+    <li><b>Storage.</b> One line per product appended to a file, so the run is fully <b>resumable</b> — crash, reboot, or block, it picks up where it left off.</li>
+  </ol>
+
+  <h2>Staying under the radar</h2>
+  <p>Everything leaves from one home IP, and Imperva counts requests per IP. So the scraper deliberately goes slow and human-like:</p>
+  <ul>
+    <li>Random <b>0.8–7s gaps</b> between requests (not a robotic fixed interval).</li>
+    <li>Occasional long "reading" pauses.</li>
+    <li>Product order <b>shuffled</b> across all countries, so it never marches predictably through one category.</li>
+  </ul>
+
+  <h2>The walls we hit live</h2>
+  <table>
+    <tr><th>Event</th><th>Fix</th></tr>
+    <tr><td>Tripped a per-IP rate limit (~450 requests in 25 min) → got challenged</td><td>Stop, cool down, resume at a gentler pace.</td></tr>
+    <tr><td>Tried <b>NordVPN</b> to spread load</td><td><span class="bad">Failed</span> — datacenter/VPN IPs are pre-flagged by Imperva and blocked harder than a home IP.</td></tr>
+    <tr><td>A CAPTCHA appeared</td><td>A human solves it once in the live window; the scraper detects the clearance and auto-resumes through that same session.</td></tr>
+  </table>
+  <blockquote>Key lesson: the bottleneck isn't speed or proxies — it's that only a <b>human-solved challenge</b> truly opens the door. So the winning recipe is patience on a trusted IP, with a person tapping the occasional CAPTCHA.</blockquote>
+
+  <h2>Why not just go parallel / use proxies?</h2>
+  <p>Running many IPs at once would only multiply the CAPTCHAs (each new IP needs its own human solve), and free VPN IPs are blocked anyway. The only clean "fast" path is paid <b>residential proxies</b> — trusted IP pools that avoid challenges — which costs money. For a free run, one careful lane wins.</p>
+
+  <p class="mut" style="margin-top:30px"><a href="index.html">← back to live progress</a></p>
+</div>
+</body>
+</html>

@@ -1,0 +1,100 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Smyths Scrape — Live Progress</title>
+<script src="https://cdn.jsdelivr.net/npm/chart.js@4.4.1/dist/chart.umd.min.js"></script>
+<style>
+  :root { --bg:#0b0e14; --card:#141925; --line:#222a3a; --txt:#e6edf3; --mut:#8b97a8; --accent:#4dd4ac; --warn:#f2b441; }
+  * { box-sizing:border-box; }
+  body { margin:0; background:var(--bg); color:var(--txt); font:15px/1.5 -apple-system,BlinkMacSystemFont,"Segoe UI",Roboto,sans-serif; }
+  .wrap { max-width:1100px; margin:0 auto; padding:28px 20px 60px; }
+  header { display:flex; justify-content:space-between; align-items:baseline; flex-wrap:wrap; gap:10px; }
+  h1 { font-size:18px; font-weight:600; margin:0; letter-spacing:.3px; }
+  a { color:var(--accent); text-decoration:none; }
+  .mut { color:var(--mut); }
+  .hero { text-align:center; margin:34px 0 10px; }
+  .big { font-size:clamp(48px,11vw,120px); font-weight:800; line-height:1; letter-spacing:-2px; }
+  .big .total { color:var(--mut); font-weight:600; }
+  .sub { font-size:clamp(16px,3vw,22px); margin-top:10px; color:var(--mut); }
+  .sub b { color:var(--accent); }
+  .bar { height:14px; background:#1d2433; border-radius:8px; overflow:hidden; margin:22px auto; max-width:680px; }
+  .bar > div { height:100%; background:linear-gradient(90deg,#4dd4ac,#3aa6ff); width:0; transition:width .6s; }
+  .grid { display:grid; grid-template-columns:repeat(auto-fill,minmax(150px,1fr)); gap:12px; margin:26px 0; }
+  .cc { background:var(--card); border:1px solid var(--line); border-radius:12px; padding:14px; }
+  .cc .flag { font-size:22px; }
+  .cc .nums { font-size:15px; font-weight:600; margin-top:4px; }
+  .cc .mini { height:7px; background:#1d2433; border-radius:5px; overflow:hidden; margin-top:8px; }
+  .cc .mini > div { height:100%; background:var(--accent); }
+  .charts { display:grid; grid-template-columns:1fr 1fr; gap:16px; margin-top:24px; }
+  .panel { background:var(--card); border:1px solid var(--line); border-radius:12px; padding:16px; }
+  .panel h3 { margin:0 0 10px; font-size:13px; font-weight:600; color:var(--mut); text-transform:uppercase; letter-spacing:.5px; }
+  @media(max-width:720px){ .charts{ grid-template-columns:1fr; } }
+  footer { margin-top:36px; color:var(--mut); font-size:13px; text-align:center; }
+</style>
+</head>
+<body>
+<div class="wrap">
+  <header>
+    <h1>🛒 Smyths Toys — Live Scrape</h1>
+    <div class="mut">updated <span id="updated">—</span> · <a href="how.html">how this works →</a></div>
+  </header>
+
+  <div class="hero">
+    <div class="big"><span id="done">—</span><span class="total"> / <span id="total">—</span></span></div>
+    <div class="bar"><div id="barfill"></div></div>
+    <div class="sub"><b id="pct">—</b>% done · ETA <b id="eta">—</b> · <span id="rate">—</span>/min · <span id="fails" class="mut">0 fails</span></div>
+  </div>
+
+  <div class="grid" id="countries"></div>
+
+  <div class="charts">
+    <div class="panel"><h3>Progress over time</h3><canvas id="cProg" height="170"></canvas></div>
+    <div class="panel"><h3>ETA over time (hours)</h3><canvas id="cEta" height="170"></canvas></div>
+    <div class="panel"><h3>Scrape rate (products/min)</h3><canvas id="cRate" height="170"></canvas></div>
+    <div class="panel"><h3>Per-country completion</h3><canvas id="cCty" height="170"></canvas></div>
+  </div>
+
+  <footer>auto-refreshes every 60s · data pushed every ~5 min · <a href="how.html">read the story →</a></footer>
+</div>
+
+<script>
+const FLAG = { uk:'🇬🇧', ie:'🇮🇪', de:'🇩🇪', at:'🇦🇹', ch:'🇨🇭', fr:'🇫🇷', nl:'🇳🇱' };
+const fmtEta = (m) => { if(m==null) return '—'; const d=Math.floor(m/1440), h=Math.floor((m%1440)/60), mm=m%60; return (d?d+'d ':'')+(h?h+'h ':'')+mm+'m'; };
+const fmtTime = (t) => new Date(t).toLocaleString();
+const charts = {};
+function line(id, label, color){ const c=document.getElementById(id); return new Chart(c,{type:'line',data:{labels:[],datasets:[{label,data:[],borderColor:color,backgroundColor:color+'22',fill:true,tension:.25,pointRadius:0,borderWidth:2}]},options:{plugins:{legend:{display:false}},scales:{x:{ticks:{color:'#8b97a8',maxTicksLimit:6},grid:{color:'#1d2433'}},y:{ticks:{color:'#8b97a8'},grid:{color:'#1d2433'},beginAtZero:true}}}}); }
+
+async function load(){
+  const s = await fetch('data/status.json?_='+Date.now()).then(r=>r.json());
+  document.getElementById('done').textContent = s.done.toLocaleString();
+  document.getElementById('total').textContent = s.total.toLocaleString();
+  document.getElementById('pct').textContent = s.pct;
+  document.getElementById('eta').textContent = fmtEta(s.etaMin);
+  document.getElementById('rate').textContent = s.ratePerMin ?? '—';
+  document.getElementById('fails').textContent = s.fails+' fails';
+  document.getElementById('updated').textContent = fmtTime(s.updated);
+  document.getElementById('barfill').style.width = s.pct+'%';
+
+  document.getElementById('countries').innerHTML = s.countries.map(c=>`
+    <div class="cc"><div class="flag">${FLAG[c.cc]||''} <span class="mut">${c.cc.toUpperCase()}</span></div>
+    <div class="nums">${c.done.toLocaleString()} <span class="mut">/ ${c.total.toLocaleString()} · ${c.pct}%</span></div>
+    <div class="mini"><div style="width:${c.pct}%"></div></div></div>`).join('');
+
+  const h = await fetch('data/history.json?_='+Date.now()).then(r=>r.json()).catch(()=>[]);
+  const labels = h.map(e=>new Date(e.t).toLocaleTimeString([], {hour:'2-digit',minute:'2-digit'}));
+  if(!charts.prog){ charts.prog=line('cProg','done','#4dd4ac'); charts.eta=line('cEta','eta','#f2b441'); charts.rate=line('cRate','rate','#3aa6ff'); }
+  const set=(ch,data)=>{ ch.data.labels=labels; ch.data.datasets[0].data=data; ch.update('none'); };
+  set(charts.prog, h.map(e=>e.done));
+  set(charts.eta, h.map(e=>e.etaMin==null?null:+(e.etaMin/60).toFixed(1)));
+  set(charts.rate, h.map(e=>e.ratePerMin));
+
+  if(!charts.cty){
+    charts.cty = new Chart(document.getElementById('cCty'),{type:'bar',data:{labels:s.countries.map(c=>c.cc.toUpperCase()),datasets:[{label:'%',data:s.countries.map(c=>c.pct),backgroundColor:'#4dd4ac'}]},options:{plugins:{legend:{display:false}},scales:{x:{ticks:{color:'#8b97a8'},grid:{display:false}},y:{max:100,ticks:{color:'#8b97a8'},grid:{color:'#1d2433'}}}}});
+  } else { charts.cty.data.datasets[0].data=s.countries.map(c=>c.pct); charts.cty.update('none'); }
+}
+load(); setInterval(load, 60000);
+</script>
+</body>
+</html>
