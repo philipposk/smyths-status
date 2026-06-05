@@ -114,12 +114,6 @@
     "detail": "NordVPN datacenter exits burned out. Tested Tor — its exit nodes pass Imperva (free, unlimited rotation). Fleet now runs 8 patchright lanes over 8 Tor circuits; bad exits auto-rotate via NEWNYM until a clean one clears the challenge."
   },
   {
-    "t": 1780641258929,
-    "type": "tick",
-    "rate": 28.13,
-    "detail": "9,716/58,650 (16.57%) · 28.13/min · 9886 fails"
-  },
-  {
     "t": 1780641562802,
     "type": "tick",
     "rate": 40.81,
@@ -430,5 +424,11 @@
     "type": "tick",
     "rate": 37.64,
     "detail": "23,032/58,650 (39.27%) · 37.64/min · 13840 fails"
+  },
+  {
+    "t": 1780655843718,
+    "type": "tick",
+    "rate": 33.11,
+    "detail": "23,213/58,650 (39.58%) · 33.11/min · 13925 fails"
   }
 ]
