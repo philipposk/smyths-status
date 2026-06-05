@@ -52,5 +52,11 @@
     "type": "milestone",
     "title": "Watchdog resumed",
     "detail": "Self-healing loop re-armed after a pause; iMessage alerts turned off (dashboard + chat only). Stuck lane revived."
+  },
+  {
+    "t": 1780632121482,
+    "type": "block",
+    "title": "Lanes restarted",
+    "detail": "0 dead + 6 stuck lane(s) relaunched (datacenter exit degradation)."
   }
 ]
