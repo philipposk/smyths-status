@@ -34,5 +34,11 @@
     "type": "scale",
     "title": "Scaled to 9 lanes",
     "detail": "Nord’s max distinct exits (9). ~9× throughput, full run projected ~6h."
+  },
+  {
+    "t": 1780628686770,
+    "type": "block",
+    "title": "Slowdown / possible block",
+    "detail": "Smyths: failures rising fast — now 1872 (was 124), 1541/58650 done. Possible block."
   }
 ]
