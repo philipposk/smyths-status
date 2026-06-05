@@ -75,7 +75,7 @@
 <script>
 const FLAG = { uk:'🇬🇧', ie:'🇮🇪', de:'🇩🇪', at:'🇦🇹', ch:'🇨🇭', fr:'🇫🇷', nl:'🇳🇱' };
 const TZ = 'Europe/Copenhagen';
-const TYPE_COLOR = { block:'#f2746b', fix:'#4dd4ac', scale:'#3aa6ff', milestone:'#f2b441', heartbeat:'#3fb950', note:'#8b97a8' };
+const TYPE_COLOR = { block:'#f2746b', fix:'#4dd4ac', scale:'#3aa6ff', milestone:'#f2b441', heartbeat:'#3fb950', tick:'#5a6577', note:'#8b97a8' };
 const fmtEta = (m) => { if(m==null) return '—'; const d=Math.floor(m/1440), h=Math.floor((m%1440)/60), mm=m%60; return (d?d+'d ':'')+(h?h+'h ':'')+mm+'m'; };
 const fmtFull = (t) => new Date(t).toLocaleString('en-GB',{timeZone:TZ,day:'2-digit',month:'short',hour:'2-digit',minute:'2-digit'});
 const charts = {};
@@ -120,7 +120,7 @@ async function load(){
 
   const hist = await fetch('data/history.json?_='+Date.now()).then(r=>r.json()).catch(()=>[]);
   const events = await fetch('data/events.json?_='+Date.now()).then(r=>r.json()).catch(()=>[]);
-  const evMarks = events.filter(e=>e.type!=='heartbeat');
+  const evMarks = events.filter(e=>e.type!=='heartbeat' && e.type!=='tick');
 
   if(!charts.prog){
     charts.prog = timeChart('cProg','done','#4dd4ac', true);
@@ -143,10 +143,11 @@ async function load(){
     charts.cty = new Chart(document.getElementById('cCty'),{type:'bar',data:{labels:s.countries.map(c=>c.cc.toUpperCase()),datasets:[{data:s.countries.map(c=>c.pct),backgroundColor:'#4dd4ac'}]},options:{plugins:{legend:{display:false}},scales:{x:{ticks:{color:'#8b97a8'},grid:{display:false}},y:{max:100,ticks:{color:'#8b97a8'},grid:{color:'#1d2433'}}}}});
   } else { charts.cty.data.datasets[0].data=s.countries.map(c=>c.pct); charts.cty.update('none'); }
 
-  document.getElementById('timeline').innerHTML = events.slice().sort((a,b)=>b.t-a.t).map(e=>`
-    <li><span class="dot" style="background:${TYPE_COLOR[e.type]||'#8b97a8'}"></span>
+  document.getElementById('timeline').innerHTML = events.slice().sort((a,b)=>b.t-a.t).slice(0,60).map(e=>{
+    const title = e.title ? `<span class="ti">${e.title}</span><br>` : '';
+    return `<li><span class="dot" style="background:${TYPE_COLOR[e.type]||'#8b97a8'}"></span>
     <span class="when">${fmtFull(e.t)}</span>
-    <span><span class="ti">${e.title}</span><br><span class="de">${e.detail||''}</span></span></li>`).join('');
+    <span>${title}<span class="de">${e.detail||''}</span></span></li>`; }).join('');
 }
 load(); setInterval(load, 60000);
 </script>

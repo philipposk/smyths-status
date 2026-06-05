@@ -42,6 +42,18 @@
     "detail": "Smyths: failures rising fast — now 1872 (was 124), 1541/58650 done. Possible block."
   },
   {
+    "t": 1780629450168,
+    "type": "fix",
+    "title": "Self-healing watchdog",
+    "detail": "Watchdog upgraded to restart stuck-but-alive lanes, not just dead ones."
+  },
+  {
+    "t": 1780629752744,
+    "type": "scale",
+    "title": "Retired dead exit → 8 lanes",
+    "detail": "A NordVPN SOCKS5 exit (San Francisco) died; its share of products was redistributed to the surviving lanes."
+  },
+  {
     "t": 1780631357478,
     "type": "block",
     "title": "Lane(s) re-opened",
@@ -66,15 +78,33 @@
     "detail": "0 relaunched, 4 paused (degraded datacenter exits cooling down)."
   },
   {
-    "t": 1780636716079,
-    "type": "heartbeat",
-    "title": "Live status",
-    "detail": "6,620 / 58,650 (11.29%) · 18.27/min · ETA 47h · 8024 fails"
+    "t": 1780634294175,
+    "type": "milestone",
+    "title": "Reached 10%",
+    "detail": "5,865 of 58,650 products."
+  },
+  {
+    "t": 1780635504883,
+    "type": "block",
+    "title": "Residential proxy tested",
+    "detail": "Bright Data residential still got challenged by Imperva — its proxy terminates SSL (MITM), so the TLS fingerprint looks non-browser."
+  },
+  {
+    "t": 1780636110281,
+    "type": "block",
+    "title": "Free fleet burning out",
+    "detail": "NordVPN datacenter exits degraded to ~1 reliable lane; throughput fell to ~10/min."
   },
   {
     "t": 1780636453950,
     "type": "block",
     "title": "Lane churn",
     "detail": "0 relaunched, 3 paused (degraded datacenter exits cooling down)."
+  },
+  {
+    "t": 1780636860660,
+    "type": "tick",
+    "rate": 25.18,
+    "detail": "6,743/58,650 (11.5%) · 25.18/min · 8024 fails"
   }
 ]
