@@ -184,5 +184,29 @@
     "type": "tick",
     "rate": 17.89,
     "detail": "9,238/58,650 (15.75%) · 17.89/min · 9874 fails"
+  },
+  {
+    "t": 1780640854028,
+    "type": "scale",
+    "title": "Tor fleet rotation",
+    "detail": "1 lanes relaunched, 6 exits rotated (free Tor circuits, all pass Imperva)."
+  },
+  {
+    "t": 1780640908154,
+    "type": "scale",
+    "title": "Switched to free Tor fleet",
+    "detail": "NordVPN datacenter exits burned out. Tested Tor — its exit nodes pass Imperva (free, unlimited rotation). Fleet now runs 8 patchright lanes over 8 Tor circuits; bad exits auto-rotate via NEWNYM until a clean one clears the challenge."
+  },
+  {
+    "t": 1780640914335,
+    "type": "tick",
+    "rate": 15.13,
+    "detail": "9,302/58,650 (15.86%) · 15.13/min · 9877 fails"
+  },
+  {
+    "t": 1780640956112,
+    "type": "tick",
+    "rate": 15.01,
+    "detail": "9,325/58,650 (15.9%) · 15.01/min · 9879 fails"
   }
 ]
