@@ -64,7 +64,7 @@
     <tr><th>Event</th><th>Fix</th></tr>
     <tr><td>Tripped a per-IP rate limit (~450 requests in 25 min) → got challenged</td><td>Stop, cool down, resume at a gentler pace.</td></tr>
     <tr><td>Tried <b>NordVPN</b> to spread load</td><td><b>Automated</b> access on the VPN IP is blocked (datacenter IPs are pre-flagged) — <span class="good">but once a human solves one CAPTCHA on it, that VPN session scrapes fine.</span> The current run is on a NordVPN IP.</td></tr>
-    <tr><td>A CAPTCHA appeared</td><td>A human solves it once in the live window; the scraper detects the clearance and auto-resumes through that same session.</td></tr>
+    <tr><td>A CAPTCHA / picture puzzle appeared</td><td><span class="good">A free vision-AI solver now clears it automatically</span> — reads the legend, clicks the doodles in order, submits; on repeated failure the lane just rotates to a fresh exit. No human needed (see below).</td></tr>
     <tr><td>Single lane too slow (~days)</td><td>Scaled to a <b>parallel fleet</b> — up to 9 browsers, each on a different NordVPN exit IP (see below).</td></tr>
     <tr><td>Datacenter IPs degrade</td><td>Each Nord exit worked in bursts (~100 products) then re-challenged; exits died outright. Datacenter IPs are pre-flagged by Imperva, so the whole VPN fleet kept burning out — throughput collapsed to ~10/min.</td></tr>
     <tr><td><b>NordVPN fleet burned out</b></td><td>Switched the whole fleet to <b>Tor</b>. Tor's exit nodes look like ordinary clients, so most <span class="good">pass Imperva for free</span> — and there are thousands of them. This is what the run uses now.</td></tr>
@@ -79,6 +79,15 @@
     <li><b>Self-healing + resumable.</b> A supervisor checks every ~90s, relaunches any lane that dies, rotates stalled ones, and the work is sharded so nothing is lost or scraped twice.</li>
   </ul>
   <blockquote>Honest trade-off: Tor is slower per request than a direct connection, and the exit pool quality swings over the day — throughput oscillates (roughly 15–80 products/min) as good exits come and go. But it's <b>free and unlimited</b>. The genuinely fast, steady path is <b>paid residential proxies</b> (trusted home IPs) — hours instead of overnight, for a few dollars.</blockquote>
+
+  <h2>When the wall escalates: the picture puzzle</h2>
+  <p>On flagged sessions Imperva escalates from the invisible JS challenge to a visible <b>"select in this order"</b> puzzle — childlike doodles drawn over a photo that you click in a given order. The run now solves these <b>itself, for free</b>, instead of waiting for a person:</p>
+  <ul>
+    <li>Focuses the browser window and arms the "Click to verify" checkbox.</li>
+    <li>Screenshots the puzzle and asks a <b>vision-AI</b> (rotated across free/cheap models — Gemini, Qwen3-VL, Groq, Nvidia) to read the legend order and find each doodle.</li>
+    <li>Clicks them in order, human-like, submits, and retries on "too many attempts" — only rotating to a fresh IP if it still can't.</li>
+  </ul>
+  <blockquote>This replaced the old "a human solves one in the window" step, so the run is now <b>fully unattended</b>. It's open-source: <a href="https://github.com/philipposk/hcaptcha-doodle-solver" target="_blank" rel="noopener">hcaptcha-doodle-solver</a>. Roughly 75–85% per puzzle — a booster layered on top of IP rotation, not a replacement for it.</blockquote>
 
   <h2>Timeline</h2>
   <p>Every block, fix, and milestone of this run — with timestamps — lives on its own page: <a href="timeline.html">see the full timeline →</a></p>
