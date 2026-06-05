@@ -198,12 +198,6 @@
     "detail": "0 lanes relaunched, 6 exits rotated (free Tor circuits, all pass Imperva)."
   },
   {
-    "t": 1780677250290,
-    "type": "tick",
-    "rate": 27.38,
-    "detail": "38,449/58,650 (65.56%) · 27.38/min · 18640 fails"
-  },
-  {
     "t": 1780677559437,
     "type": "tick",
     "rate": 26.05,
@@ -520,5 +514,11 @@
     "type": "tick",
     "rate": 26.44,
     "detail": "50,982/58,650 (86.93%) · 26.44/min · 21429 fails"
+  },
+  {
+    "t": 1780692723776,
+    "type": "tick",
+    "rate": 25.48,
+    "detail": "51,147/58,650 (87.21%) · 25.48/min · 21460 fails"
   }
 ]
