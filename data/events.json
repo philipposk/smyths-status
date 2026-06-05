@@ -358,5 +358,17 @@
     "type": "tick",
     "rate": 77.88,
     "detail": "16,665/58,650 (28.41%) · 77.88/min · 11266 fails"
+  },
+  {
+    "t": 1780648210449,
+    "type": "scale",
+    "title": "Tor fleet rotation",
+    "detail": "0 lanes relaunched, 1 exits rotated (free Tor circuits, all pass Imperva)."
+  },
+  {
+    "t": 1780648246421,
+    "type": "tick",
+    "rate": 79.2,
+    "detail": "17,077/58,650 (29.12%) · 79.2/min · 11307 fails"
   }
 ]
