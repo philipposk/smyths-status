@@ -66,9 +66,15 @@
     "detail": "0 relaunched, 4 paused (degraded datacenter exits cooling down)."
   },
   {
-    "t": 1780636413304,
+    "t": 1780636716079,
     "type": "heartbeat",
     "title": "Live status",
-    "detail": "6,365 / 58,650 (10.85%) · 11.06/min · ETA 79h · 7937 fails"
+    "detail": "6,620 / 58,650 (11.29%) · 18.27/min · ETA 47h · 8024 fails"
+  },
+  {
+    "t": 1780636453950,
+    "type": "block",
+    "title": "Lane churn",
+    "detail": "0 relaunched, 3 paused (degraded datacenter exits cooling down)."
   }
 ]
