@@ -222,12 +222,6 @@
     "detail": "0 lanes relaunched, 2 exits rotated (free Tor circuits, all pass Imperva)."
   },
   {
-    "t": 1780686631391,
-    "type": "tick",
-    "rate": 77.43,
-    "detail": "46,852/58,650 (79.88%) · 77.43/min · 20485 fails"
-  },
-  {
     "t": 1780686937214,
     "type": "tick",
     "rate": 64.51,
@@ -556,5 +550,17 @@
     "type": "tick",
     "rate": 39.17,
     "detail": "56,361/58,650 (96.1%) · 39.17/min · 22135 fails"
+  },
+  {
+    "t": 1780701065990,
+    "type": "scale",
+    "title": "hCaptcha auto-solver deployed",
+    "detail": "All 8 lanes now auto-solve Imperva's 'select in this order' doodle puzzle: arms the checkbox, reads the legend, clicks the doodles in order, submits, retries. Early misfires then self-corrected (nested-iframe + Retina-scale + concurrency-cap fixes); ~80% first-try, no human needed."
+  },
+  {
+    "t": 1780701225343,
+    "type": "tick",
+    "rate": 36.05,
+    "detail": "56,589/58,650 (96.49%) · 36.05/min · 22158 fails"
   }
 ]
