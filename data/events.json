@@ -192,12 +192,6 @@
     "detail": "0 lanes relaunched, 5 exits rotated (free Tor circuits, all pass Imperva)."
   },
   {
-    "t": 1780672274012,
-    "type": "tick",
-    "rate": 20.4,
-    "detail": "36,864/58,650 (62.85%) · 20.4/min · 17990 fails"
-  },
-  {
     "t": 1780672582659,
     "type": "tick",
     "rate": 15.96,
@@ -508,5 +502,17 @@
     "type": "tick",
     "rate": 37.35,
     "detail": "46,891/58,650 (79.95%) · 37.35/min · 20944 fails"
+  },
+  {
+    "t": 1780687841282,
+    "type": "milestone",
+    "title": "Reached 80%",
+    "detail": "47,108 of 58,650 products."
+  },
+  {
+    "t": 1780687841282,
+    "type": "tick",
+    "rate": 33.05,
+    "detail": "47,108/58,650 (80.32%) · 33.05/min · 20972 fails"
   }
 ]
