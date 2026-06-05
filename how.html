@@ -62,13 +62,13 @@
   <table>
     <tr><th>Event</th><th>Fix</th></tr>
     <tr><td>Tripped a per-IP rate limit (~450 requests in 25 min) → got challenged</td><td>Stop, cool down, resume at a gentler pace.</td></tr>
-    <tr><td>Tried <b>NordVPN</b> to spread load</td><td><span class="bad">Failed</span> — datacenter/VPN IPs are pre-flagged by Imperva and blocked harder than a home IP.</td></tr>
+    <tr><td>Tried <b>NordVPN</b> to spread load</td><td><b>Automated</b> access on the VPN IP is blocked (datacenter IPs are pre-flagged) — <span class="good">but once a human solves one CAPTCHA on it, that VPN session scrapes fine.</span> The current run is on a NordVPN IP.</td></tr>
     <tr><td>A CAPTCHA appeared</td><td>A human solves it once in the live window; the scraper detects the clearance and auto-resumes through that same session.</td></tr>
   </table>
   <blockquote>Key lesson: the bottleneck isn't speed or proxies — it's that only a <b>human-solved challenge</b> truly opens the door. So the winning recipe is patience on a trusted IP, with a person tapping the occasional CAPTCHA.</blockquote>
 
   <h2>Why not just go parallel / use proxies?</h2>
-  <p>Running many IPs at once would only multiply the CAPTCHAs (each new IP needs its own human solve), and free VPN IPs are blocked anyway. The only clean "fast" path is paid <b>residential proxies</b> — trusted IP pools that avoid challenges — which costs money. For a free run, one careful lane wins.</p>
+  <p>Running many IPs at once would only multiply the CAPTCHAs — each new IP (VPN or not) needs its own human solve to clear Imperva's first challenge. The only clean "fast" path is paid <b>residential proxies</b> — trusted IP pools that avoid challenges — which costs money. For a free run, one careful lane wins.</p>
 
   <p class="mut" style="margin-top:30px"><a href="index.html">← back to live progress</a></p>
 </div>
