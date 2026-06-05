@@ -66,19 +66,19 @@
     <tr><td>Tried <b>NordVPN</b> to spread load</td><td><b>Automated</b> access on the VPN IP is blocked (datacenter IPs are pre-flagged) — <span class="good">but once a human solves one CAPTCHA on it, that VPN session scrapes fine.</span> The current run is on a NordVPN IP.</td></tr>
     <tr><td>A CAPTCHA appeared</td><td>A human solves it once in the live window; the scraper detects the clearance and auto-resumes through that same session.</td></tr>
     <tr><td>Single lane too slow (~days)</td><td>Scaled to a <b>parallel fleet</b> — up to 9 browsers, each on a different NordVPN exit IP (see below).</td></tr>
-    <tr><td>Datacenter IPs degrade</td><td>Each Nord exit works in bursts (~100 products) then re-challenges; one exit (San Francisco) went fully dead. A <b>self-healing watchdog</b> relaunches dead lanes, the dead exit was retired, and its share of products was handed to the surviving lanes.</td></tr>
+    <tr><td>Datacenter IPs degrade</td><td>Each Nord exit worked in bursts (~100 products) then re-challenged; exits died outright. Datacenter IPs are pre-flagged by Imperva, so the whole VPN fleet kept burning out — throughput collapsed to ~10/min.</td></tr>
+    <tr><td><b>NordVPN fleet burned out</b></td><td>Switched the whole fleet to <b>Tor</b>. Tor's exit nodes look like ordinary clients, so most <span class="good">pass Imperva for free</span> — and there are thousands of them. This is what the run uses now.</td></tr>
   </table>
-  <blockquote>Key lesson: the real bottleneck is the <b>human-solved challenge</b> — every IP, even a proxy, needs one to open its session. Speed then comes from running several solved sessions <b>in parallel</b> (next section), with a person tapping the occasional CAPTCHA.</blockquote>
+  <blockquote>Key lesson: the real bottleneck is a <b>cleared session</b> — every IP needs to get past the wall once. patchright clears it automatically over a good Tor exit, so speed comes from running many cleared sessions <b>in parallel</b> (next section), rotating away from any exit that gets blocked.</blockquote>
 
-  <h2>Going parallel: the browser fleet</h2>
-  <p>One lane would take days, so we run several browsers at once — each routed through a <b>different NordVPN SOCKS5 exit</b> (a different IP). Because Imperva's rate limit is per-IP, each lane gets its own budget, multiplying throughput.</p>
+  <h2>Going parallel: the Tor browser fleet</h2>
+  <p>One lane would take days, so we run several browsers at once — each routed through a <b>different Tor exit node</b> (a different IP). Because Imperva's rate limit is per-IP, each lane gets its own budget, multiplying throughput. Tor gives a near-unlimited, <b>free</b> supply of IPs.</p>
   <ul>
-    <li><b>Different IP per browser.</b> Each lane uses a separate Nord exit (Amsterdam, Atlanta, Dallas, New York, …) — up to 9, now 8 after one died.</li>
-    <li><b>A tiny local relay (gost).</b> Chrome can't log in to a SOCKS proxy by itself, so a small local relay handles the Nord login and hands each browser a clean local port.</li>
-    <li><b>One human CAPTCHA per lane.</b> Each lane's session is opened by a single hand-solved challenge, then it scrapes its own shard of the catalogue.</li>
-    <li><b>Self-healing + resumable.</b> A watchdog checks every 5 min, relaunches any lane that dies, and the work is sharded so nothing is lost or scraped twice.</li>
+    <li><b>Different IP per browser.</b> Each lane runs its own local Tor circuit, so all 8 lanes exit from different IPs around the world.</li>
+    <li><b>Self-rotating exits.</b> Tor exit quality varies — some are clean, some are blocked. When a lane gets challenged it sends a <code>NEWNYM</code> signal to swap to a fresh exit, instantly and for free, until one clears the wall. (A good exit's challenge auto-solves in ~15–20s, so each is given that long before rotating.)</li>
+    <li><b>Self-healing + resumable.</b> A supervisor checks every ~90s, relaunches any lane that dies, rotates stalled ones, and the work is sharded so nothing is lost or scraped twice.</li>
   </ul>
-  <blockquote>Honest trade-off: these are <b>datacenter</b> IPs, so they degrade — lanes re-challenge after a burst and need the odd re-solve, and an exit can die outright. The genuinely fast, near-zero-CAPTCHA path is <b>paid residential proxies</b> (trusted home IPs). The free fleet trades a little babysitting for $0.</blockquote>
+  <blockquote>Honest trade-off: Tor is slower per request than a direct connection, and the exit pool quality swings over the day — throughput oscillates (roughly 15–80 products/min) as good exits come and go. But it's <b>free and unlimited</b>. The genuinely fast, steady path is <b>paid residential proxies</b> (trusted home IPs) — hours instead of overnight, for a few dollars.</blockquote>
 
   <h2>Timeline (this run)</h2>
   <ul id="timeline" class="tl"><li class="mut">loading…</li></ul>
