@@ -20,6 +20,10 @@
   .big .total { color:var(--mut); font-weight:600; }
   .sub { font-size:clamp(16px,3vw,22px); margin-top:10px; color:var(--mut); }
   .sub b { color:var(--accent); }
+  .delta { font-weight:700; }
+  .delta.up { color:#3fb950; font-size:clamp(15px,2.6vw,28px); margin-left:12px; vertical-align:baseline; }
+  .delta.fl { color:#5a9cf2; font-size:.62em; font-weight:600; margin-left:5px; }
+  .delta:empty { display:none; }
   .bar { height:14px; background:#1d2433; border-radius:8px; overflow:hidden; margin:22px auto; max-width:680px; }
   .bar > div { height:100%; background:linear-gradient(90deg,#4dd4ac,#3aa6ff); width:0; transition:width .6s; }
   .grid { display:grid; grid-template-columns:repeat(auto-fill,minmax(150px,1fr)); gap:12px; margin:26px 0; }
@@ -46,13 +50,13 @@
 <div class="wrap">
   <header>
     <h1>🛒 Smyths Toys — Live Scrape</h1>
-    <div class="mut">updated <span id="updated">—</span> · <a href="how.html">how it works →</a> · <a href="samples.html">examples →</a></div>
+    <div class="mut">updated <span id="updated">—</span> · <a href="how.html">how it works →</a> · <a href="timeline.html">timeline →</a> · <a href="samples.html">examples →</a></div>
   </header>
 
   <div class="hero">
-    <div class="big"><span id="done">—</span><span class="total"> / <span id="total">—</span></span></div>
+    <div class="big"><span id="done">—</span><span class="total"> / <span id="total">—</span></span><span id="doneDelta" class="delta up" title="new products since last update (~5 min)"></span></div>
     <div class="bar"><div id="barfill"></div></div>
-    <div class="sub"><b id="pct">—</b>% done · ETA <b id="eta">—</b> · <span id="rate">—</span>/min · <span id="fails" class="mut">0 fails</span></div>
+    <div class="sub"><b id="pct">—</b>% done · ETA <b id="eta">—</b> · <span id="rate">—</span>/min · <span id="fails" class="mut">0 fails</span><span id="failsDelta" class="delta fl" title="new fails since last update (~5 min)"></span></div>
   </div>
 
   <div class="grid" id="countries"></div>
@@ -65,7 +69,7 @@
   </div>
 
   <div class="panel tl">
-    <h3>Timeline — what happened</h3>
+    <h3>Recent activity · <a href="timeline.html" style="text-transform:none;font-weight:600;letter-spacing:0">full timeline →</a></h3>
     <ul id="timeline"></ul>
   </div>
 
@@ -110,6 +114,8 @@ async function load(){
   document.getElementById('eta').textContent = fmtEta(s.etaMin);
   document.getElementById('rate').textContent = s.ratePerMin ?? '—';
   document.getElementById('fails').textContent = s.fails+' fails';
+  document.getElementById('doneDelta').textContent = (s.doneDelta>0) ? '+'+s.doneDelta.toLocaleString() : '';
+  document.getElementById('failsDelta').textContent = (s.failsDelta>0) ? '+'+s.failsDelta : '';
   document.getElementById('updated').textContent = fmtFull(s.updated);
   document.getElementById('barfill').style.width = s.pct+'%';
 
@@ -143,7 +149,7 @@ async function load(){
     charts.cty = new Chart(document.getElementById('cCty'),{type:'bar',data:{labels:s.countries.map(c=>c.cc.toUpperCase()),datasets:[{data:s.countries.map(c=>c.pct),backgroundColor:'#4dd4ac'}]},options:{plugins:{legend:{display:false}},scales:{x:{ticks:{color:'#8b97a8'},grid:{display:false}},y:{max:100,ticks:{color:'#8b97a8'},grid:{color:'#1d2433'}}}}});
   } else { charts.cty.data.datasets[0].data=s.countries.map(c=>c.pct); charts.cty.update('none'); }
 
-  document.getElementById('timeline').innerHTML = events.slice().sort((a,b)=>b.t-a.t).slice(0,60).map(e=>{
+  document.getElementById('timeline').innerHTML = events.slice().sort((a,b)=>b.t-a.t).slice(0,6).map(e=>{
     const title = e.title ? `<span class="ti">${e.title}</span><br>` : '';
     return `<li><span class="dot" style="background:${TYPE_COLOR[e.type]||'#8b97a8'}"></span>
     <span class="when">${fmtFull(e.t)}</span>
