@@ -1,13 +1,13 @@
 {
-  "updated": 1780707646094,
+  "updated": 1780707949637,
   "total": 58650,
   "done": 58599,
-  "fails": 22969,
+  "fails": 23034,
   "doneDelta": 0,
-  "failsDelta": 64,
+  "failsDelta": 65,
   "pct": 99.91,
-  "ratePerMin": 10.44,
-  "etaMin": 5,
+  "ratePerMin": 6.95,
+  "etaMin": 7,
   "countries": [
     {
       "cc": "uk",
