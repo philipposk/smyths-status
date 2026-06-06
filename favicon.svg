@@ -1,12 +1,28 @@
 <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 64 64" width="64" height="64">
   <defs>
-    <linearGradient id="bg" x1="0" y1="0" x2="0" y2="1">
-      <stop offset="0" stop-color="#ED3A56"/>
-      <stop offset="1" stop-color="#D62B43"/>
+    <linearGradient id="red" x1="0" y1="0" x2="0" y2="1">
+      <stop offset="0" stop-color="#EF2A30"/>
+      <stop offset="0.55" stop-color="#E11D24"/>
+      <stop offset="1" stop-color="#C5141B"/>
     </linearGradient>
+    <linearGradient id="yel" x1="0" y1="0" x2="0" y2="1">
+      <stop offset="0" stop-color="#FFD23C"/>
+      <stop offset="1" stop-color="#F7B500"/>
+    </linearGradient>
+    <filter id="shadow" x="-25%" y="-20%" width="150%" height="155%">
+      <feDropShadow dx="0" dy="2" stdDeviation="1.8" flood-color="#7a0c10" flood-opacity="0.45"/>
+    </filter>
   </defs>
-  <rect x="2" y="2" width="60" height="60" rx="17" fill="url(#bg)"/>
+  <!-- red badge, 3D gradient + soft drop shadow (Smyths look) -->
+  <rect x="5" y="4.5" width="54" height="54" rx="15" fill="url(#red)" filter="url(#shadow)"/>
+  <!-- subtle top sheen -->
+  <rect x="8.5" y="8" width="47" height="19" rx="10" fill="#ffffff" opacity="0.12"/>
+  <!-- S depth shadow -->
+  <text x="32" y="35.4" text-anchor="middle" dominant-baseline="central"
+        font-family="'Arial Rounded MT Bold','Baloo 2','Quicksand','Trebuchet MS',system-ui,sans-serif"
+        font-size="47" font-weight="900" fill="#9e0f15" opacity="0.5">S</text>
+  <!-- yellow S -->
   <text x="32" y="34" text-anchor="middle" dominant-baseline="central"
         font-family="'Arial Rounded MT Bold','Baloo 2','Quicksand','Trebuchet MS',system-ui,sans-serif"
-        font-size="44" font-weight="800" fill="#FBC42E">S</text>
+        font-size="47" font-weight="900" fill="url(#yel)">S</text>
 </svg>
