@@ -234,18 +234,6 @@
     "detail": "0 lanes relaunched, 1 exits rotated (free Tor circuits, all pass Imperva)."
   },
   {
-    "t": 1780689656594,
-    "type": "tick",
-    "rate": 65.81,
-    "detail": "49,099/58,650 (83.72%) · 65.81/min · 21047 fails"
-  },
-  {
-    "t": 1780689958745,
-    "type": "tick",
-    "rate": 74.03,
-    "detail": "49,507/58,650 (84.41%) · 74.03/min · 21057 fails"
-  },
-  {
     "t": 1780690260841,
     "type": "tick",
     "rate": 73.56,
@@ -568,5 +556,29 @@
     "type": "tick",
     "rate": 16.9,
     "detail": "58,188/58,650 (99.21%) · 16.9/min · 22513 fails"
+  },
+  {
+    "t": 1780705243117,
+    "type": "block",
+    "title": "Slowdown / possible block",
+    "detail": "Smyths: slow — only 0 new while failures +44. Possible block."
+  },
+  {
+    "t": 1780705445526,
+    "type": "note",
+    "title": "Δ 0 — plateaued",
+    "detail": "Was driving home."
+  },
+  {
+    "t": 1780705445947,
+    "type": "tick",
+    "rate": 13.46,
+    "detail": "58,188/58,650 (99.21%) · 13.46/min · 22569 fails"
+  },
+  {
+    "t": 1780705520264,
+    "type": "tick",
+    "rate": 13.44,
+    "detail": "58,204/58,650 (99.24%) · 13.44/min · 22576 fails"
   }
 ]
