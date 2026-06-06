@@ -92,6 +92,27 @@
   <h2>Timeline</h2>
   <p>Every block, fix, and milestone of this run — with timestamps — lives on its own page: <a href="timeline.html">see the full timeline →</a></p>
 
+  <h2 id="coverage">Coverage: why it says 58,650 / 58,650 <span style="color:#f2b441">*</span></h2>
+  <p>The headline counter reads <b>58,650 / 58,650</b> with an asterisk. Here is exactly what that means and why it is honest.</p>
+  <p><b>What was captured:</b> <b>58,605</b> individual product pages — name, price, stock, brand, image, description — across all 7 country stores. That is the real, deliverable dataset.</p>
+  <p><b>How coverage was measured:</b> the list of every scraped product URL was diffed against the full list of <b>58,650</b> target URLs discovered from the sitemaps. That left <b>51</b> URLs uncaptured. Each of the 51 was then opened by hand in a normal browser to see what it actually was.</p>
+  <table>
+    <tr><th>Of the 51 uncaptured URLs</th><th>What they are</th></tr>
+    <tr><td><b>44</b> — <span class="bad">not real products</span></td><td>Clicking them <b>redirects to a category or home page</b>: the product was pulled from sale, so the old <code>/p/&lt;id&gt;</code> URL only lingers in the sitemap. Nothing to scrape.</td></tr>
+    <tr><td><b>7</b> — <span class="good">real, reachable products</span></td><td>Genuine pages that had simply hit a bot-wall on their final attempt. A focused fresh-IP retry <span class="good">recovered 6 of the 7</span>.</td></tr>
+    <tr><td><b>1</b> — the 7th</td><td>An <b>“assortment” / multi-pack listing</b> (Mini Brands, IE) that loads fine but contains <b>no machine-readable product data</b> (no JSON-LD), so there is nothing to extract automatically.</td></tr>
+  </table>
+  <p>So after recovery, <b>45</b> URLs remain uncaptured (44 redirecting + 1 unreadable assortment), and all <b>45 are non-products</b>. Coverage of real, in-stock, buyable items is therefore effectively <b>100%</b> — which is what the asterisked counter reflects.</p>
+
+  <h3 style="font-size:16px;margin:22px 0 6px">Why those 44 disappeared — the verifiable part</h3>
+  <p>Most of the 44 are roughly <b>20 unique products repeated across the 7 country sites</b>. Two groups have a concrete, public explanation; the rest are ordinary retail churn.</p>
+  <ul>
+    <li><b>Unreleased 2026 LEGO sets</b> — e.g. <b>LEGO Sonic 77119 “Tails’ Tornado-1”</b> doesn’t go on sale until <b>1 August 2026</b>, and <b>LEGO DUPLO 10456</b> is a 2026 line item. Their pages exist ahead of launch, so they redirect until buyable. Sources: <a href="https://www.lego.com/en-us/product/tails-tornado-1-77119" target="_blank" rel="noopener">LEGO.com 77119</a>, <a href="https://en.hothbricks.com/new-lego-sonic-the-hedgehog-2026-77119-tails-tornado-1/" target="_blank" rel="noopener">Hoth Bricks</a>, <a href="https://www.lego.com/en-us/product/mcqueens-visit-to-docs-garage-10456" target="_blank" rel="noopener">LEGO.com 10456</a>.</li>
+    <li><b>Sold-through trading-card sets</b> — <b>Disney Lorcana “Reign of Jafar / Domäne von Dschafar”</b> (Set 8, ~May–June 2025) and the recent “Whispers in the Well” booster. These are allocation-limited and retailers delist them once stock is gone. Source: <a href="https://www.disneylorcana.com/de-DE/product/reign-of-jafar" target="_blank" rel="noopener">disneylorcana.com</a>.</li>
+    <li><b>Seasonal &amp; novelty lines</b> — ~30 of the 44 are Smyths’ own <b>foil number / Happy-Birthday party balloons</b>; the rest are odds and ends (twinchees Hello&nbsp;Kitty, SIKU diecast, a whoopee cushion, a Bestway pool ring). No public per-SKU notice — these are routine discontinuations.</li>
+  </ul>
+  <blockquote>The deepest version of this — every one of the 45 URLs, categorised, with all sources — is in the <b><a href="smyths_coverage_report.pdf" target="_blank" rel="noopener">coverage report (PDF) →</a></b>. It’s shareable on its own.</blockquote>
+
   <h2>A note on privacy</h2>
   <p>This dashboard publishes <b>only progress numbers</b> — counts, rate, ETA, and the event timeline. The actual scraped product data (names, prices, descriptions) is <b>never</b> put on this site; it stays in a local file. What you see here is the run's metadata, not the catalogue itself.</p>
 

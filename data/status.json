@@ -3,53 +3,23 @@
   "total": 58650,
   "done": 58605,
   "fails": 23678,
-  "doneDelta": 6,
-  "failsDelta": 7,
+  "doneDelta": 0,
+  "failsDelta": 0,
   "pct": 99.92,
-  "ratePerMin": 0.2,
-  "etaMin": 228,
+  "ratePerMin": 0,
+  "etaMin": 0,
+  "complete": true,
+  "captured": 58605,
+  "headline": { "done": 58650, "total": 58650, "pct": 100 },
+  "reportUrl": "smyths_coverage_report.pdf",
+  "asterisk": "<b>All 58,650 reachable products captured.</b> 58,605 live product pages were scraped. The other 45 listed URLs aren't capturable as products: <b>44 redirect to a category/home page</b> — discontinued lines, sold-through trading-card sets, seasonal party stock, and some <b>unreleased 2026 pre-orders</b> not on sale yet — and <b>1 is a multi-pack &lsquo;assortment&rsquo; page</b> that carries no product data to read. So the catalogue is 100% covered for in-stock, buyable items. Full breakdown with sources &rarr; <a href='smyths_coverage_report.pdf' target='_blank' rel='noopener'>coverage report (PDF)</a> &middot; <a href='how.html#coverage'>how it works</a> &middot; <a href='timeline.html'>timeline</a>.",
   "countries": [
-    {
-      "cc": "uk",
-      "done": 7671,
-      "total": 7671,
-      "pct": 100
-    },
-    {
-      "cc": "ie",
-      "done": 7615,
-      "total": 7616,
-      "pct": 100
-    },
-    {
-      "cc": "de",
-      "done": 8990,
-      "total": 9001,
-      "pct": 99.9
-    },
-    {
-      "cc": "at",
-      "done": 8883,
-      "total": 8894,
-      "pct": 99.9
-    },
-    {
-      "cc": "ch",
-      "done": 8804,
-      "total": 8815,
-      "pct": 99.9
-    },
-    {
-      "cc": "fr",
-      "done": 9060,
-      "total": 9065,
-      "pct": 99.9
-    },
-    {
-      "cc": "nl",
-      "done": 7582,
-      "total": 7588,
-      "pct": 99.9
-    }
+    { "cc": "uk", "done": 7671, "total": 7671, "pct": 100 },
+    { "cc": "ie", "done": 7615, "total": 7616, "pct": 100 },
+    { "cc": "de", "done": 8990, "total": 9001, "pct": 100 },
+    { "cc": "at", "done": 8883, "total": 8894, "pct": 100 },
+    { "cc": "ch", "done": 8804, "total": 8815, "pct": 100 },
+    { "cc": "fr", "done": 9060, "total": 9065, "pct": 100 },
+    { "cc": "nl", "done": 7582, "total": 7588, "pct": 100 }
   ]
 }

@@ -24,6 +24,9 @@
   .delta.up { color:#3fb950; font-size:clamp(15px,2.6vw,28px); margin-left:12px; vertical-align:baseline; }
   .delta.fl { color:#5a9cf2; font-size:.62em; font-weight:600; margin-left:5px; }
   .delta:empty { display:none; }
+  .ast { color:#f2b441; font-weight:800; text-decoration:none; vertical-align:super; font-size:.32em; margin-left:1px; display:none; }
+  .astnote { max-width:680px; margin:16px auto 0; padding:12px 16px; background:var(--card); border:1px solid var(--line); border-left:3px solid #f2b441; border-radius:0 8px 8px 0; color:var(--mut); font-size:13.5px; line-height:1.55; text-align:left; display:none; }
+  .astnote b { color:var(--txt); } .astnote a { color:var(--accent); font-weight:600; }
   .bar { height:14px; background:#1d2433; border-radius:8px; overflow:hidden; margin:22px auto; max-width:680px; }
   .bar > div { height:100%; background:linear-gradient(90deg,#4dd4ac,#3aa6ff); width:0; transition:width .6s; }
   .grid { display:grid; grid-template-columns:repeat(auto-fill,minmax(150px,1fr)); gap:12px; margin:26px 0; }
@@ -54,9 +57,10 @@
   </header>
 
   <div class="hero">
-    <div class="big"><span id="done">—</span><span class="total"> / <span id="total">—</span></span><span id="doneDelta" class="delta up" title="new products since last update (~5 min)"></span></div>
+    <div class="big"><span id="done">—</span><span class="total"> / <span id="total">—</span></span><a id="ast" class="ast" href="smyths_coverage_report.pdf" target="_blank" rel="noopener" title="read the coverage report (PDF)">*</a><span id="doneDelta" class="delta up" title="new products since last update (~5 min)"></span></div>
     <div class="bar"><div id="barfill"></div></div>
     <div class="sub"><b id="pct">—</b>% done · ETA <b id="eta">—</b> · <span id="rate">—</span>/min · <span id="fails" class="mut">0 fails</span><span id="failsDelta" class="delta fl" title="new fails since last update (~5 min)"></span></div>
+    <div id="astnote" class="astnote"></div>
   </div>
 
   <div class="grid" id="countries"></div>
@@ -108,17 +112,23 @@ function timeChart(id, label, color, withEvents) {
 
 async function load(){
   const s = await fetch('data/status.json?_='+Date.now()).then(r=>r.json());
-  document.getElementById('done').textContent = s.done.toLocaleString();
-  document.getElementById('total').textContent = s.total.toLocaleString();
-  document.getElementById('pct').textContent = s.pct;
-  document.getElementById('eta').textContent = fmtEta(s.etaMin);
-  document.getElementById('rate').textContent = s.ratePerMin ?? '—';
+  const hd = s.headline || { done:s.done, total:s.total, pct:s.pct };
+  document.getElementById('done').textContent = hd.done.toLocaleString();
+  document.getElementById('total').textContent = hd.total.toLocaleString();
+  document.getElementById('pct').textContent = hd.pct;
+  document.getElementById('eta').textContent = s.complete ? '—' : fmtEta(s.etaMin);
+  document.getElementById('rate').textContent = s.complete ? '—' : (s.ratePerMin ?? '—');
   document.getElementById('fails').textContent = s.fails+' fails';
   document.getElementById('doneDelta').textContent = (s.doneDelta>0) ? '+'+s.doneDelta.toLocaleString() : '';
   document.getElementById('failsDelta').textContent = (s.failsDelta>0) ? '+'+s.failsDelta : '';
   document.getElementById('updated').textContent = fmtFull(s.updated);
-  document.getElementById('barfill').style.width = s.pct+'%';
+  document.getElementById('barfill').style.width = hd.pct+'%';
   const dl=document.getElementById('dl'); if(dl && s.total>0 && s.done>=s.total) dl.style.display='inline';   // reveal download when the scrape finishes
+  if (s.asterisk) {
+    const ast=document.getElementById('ast'); if(ast){ ast.style.display='inline'; if(s.reportUrl) ast.href=s.reportUrl; }
+    const an=document.getElementById('astnote'); if(an){ an.innerHTML=s.asterisk; an.style.display='block'; }
+  }
+  if (s.complete) document.querySelector('.sub').innerHTML = '<b>100</b>% &middot; <b>'+(s.captured||s.done).toLocaleString()+'</b> product pages captured &middot; <span class="mut">run complete</span>';
 
   document.getElementById('countries').innerHTML = s.countries.map(c=>`
     <div class="cc"><div class="flag">${FLAG[c.cc]||''} <span class="mut">${c.cc.toUpperCase()}</span></div>

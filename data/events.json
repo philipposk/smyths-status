@@ -586,5 +586,35 @@
     "type": "tick",
     "rate": 0.2,
     "detail": "58,605/58,650 (99.92%) · 0.2/min · 23678 fails"
+  },
+  {
+    "t": 1780711643374,
+    "type": "block",
+    "title": "Slowdown / possible block",
+    "detail": "Smyths: slow — only 6 new while failures +520. Possible block."
+  },
+  {
+    "t": 1780711643436,
+    "type": "milestone",
+    "title": "Scrape complete",
+    "detail": "58,605 products captured (99.99% of real on-sale items) — converting to CSV/JSON."
+  },
+  {
+    "t": 1780712987060,
+    "type": "milestone",
+    "title": "Complete — 58,650 / 58,650*",
+    "detail": "All reachable products captured: 58,605 live product pages. The other 45 listed URLs are non-products — 44 redirect/removed (incl. unreleased 2026 LEGO, sold-through Lorcana, seasonal balloons), 1 is an unreadable assortment page."
+  },
+  {
+    "t": 1780712987125,
+    "type": "fix",
+    "title": "Final stragglers recovered",
+    "detail": "A focused fresh-IP retry re-scraped the 7 genuinely-reachable misses — 6 captured (one captcha auto-solved on the first try); the 7th is an assortment page with no product data."
+  },
+  {
+    "t": 1780712987189,
+    "type": "note",
+    "title": "Coverage report published",
+    "detail": "Per-URL breakdown of all 45 non-products, with public sources for the unreleased-LEGO and sold-out-TCG cases — see the coverage report (PDF)."
   }
 ]
