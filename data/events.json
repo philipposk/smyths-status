@@ -252,12 +252,6 @@
     "detail": "Smyths: progress STALLED at 52841/58650 (no new since last check). Likely blocked/re-warming."
   },
   {
-    "t": 1780695781916,
-    "type": "tick",
-    "rate": 17.09,
-    "detail": "52,841/58,650 (90.1%) · 17.09/min · 21676 fails"
-  },
-  {
     "t": 1780696084237,
     "type": "tick",
     "rate": 6.92,
@@ -583,6 +577,12 @@
   },
   {
     "t": 1780710992560,
+    "type": "tick",
+    "rate": 0,
+    "detail": "58,599/58,650 (99.91%) · 0/min · 23671 fails"
+  },
+  {
+    "t": 1780711296007,
     "type": "tick",
     "rate": 0,
     "detail": "58,599/58,650 (99.91%) · 0/min · 23671 fails"
