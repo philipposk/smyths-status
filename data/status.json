@@ -1,10 +1,10 @@
 {
-  "updated": 1780709773102,
+  "updated": 1780710081388,
   "total": 58650,
   "done": 58599,
   "fails": 23512,
   "doneDelta": 0,
-  "failsDelta": 55,
+  "failsDelta": 0,
   "pct": 99.91,
   "ratePerMin": null,
   "etaMin": null,
